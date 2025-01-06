@@ -3,9 +3,9 @@
 Welcome to the **Java RPG Game**! 🚀 Immerse yourself in a thrilling role-playing game experience, fully developed in Java. This project brings together dynamic gameplay, immersive storylines, and engaging mechanics, all crafted for RPG enthusiasts. 🌟
 
 ## 🌟 **Key Features**:
-- ⚔️ **Combat System**: Engage in strategic battles with a variety of enemies.
+- ⚔️ **Combat System**: Coming soon...
 - 🌍 **Exploration**: Discover new worlds, complete quests, and unlock hidden treasures.
-- 🏰 **Character Development**: Build and customize your character's abilities and equipment.
+- 🏰 **Character Development**: Build and customize your character's abilities and equipment(not in the game but you can modify pixel art on ressources folder).
 - 🧙 **Storyline**: Follow a captivating story filled with twists, turns, and epic adventures.
 
 ## 🛠️ **Technologies Used**:
