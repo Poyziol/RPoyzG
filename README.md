@@ -34,11 +34,5 @@ Join us in enhancing this RPG game! Whether it's new features, bug fixes, or cre
 
 Embark on an epic journey with the Java RPG Game, and experience the thrill of adventure, all powered by Java! 🌟
 
-vbnet
-Copier le code
-
-You can copy and paste this Markdown text into your GitHub repository's README file or any other Markdown-supporting platform. Let me know if you need any further adjustments! 😊
-
-
 This is a game i made to pass time ;)
 
