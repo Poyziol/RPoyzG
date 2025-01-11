@@ -1,0 +1,9 @@
+Compilation linux:
+  javac -d bin -sourcepath src *.java
+
+Execution linux:
+  java -cp bin:resources aff.Main
+
+Compilation windows:
+
+Execution windows: 
