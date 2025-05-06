@@ -12,20 +12,6 @@ Welcome to the **Java RPG Game**! 🚀 Immerse yourself in a thrilling role-play
 - **Language**: Java ☕
 - **Game Engine**: Custom-built, optimized for performance and flexibility.
 
-## 💻 **Compilation and Execution**:
-
-### **Linux**:
-- **Compilation**:
-  ```bash
-  javac -d bin -sourcepath src *.java
-- **Execution**:
-  ```bash
-  java -cp bin:resources aff.Main
-Windows:
-Compilation: (Coming soon)
-
-Execution: (Coming soon)
-
 📄 Documentation:
 Detailed documentation is provided to help you navigate through the game development process and understand the core mechanics. 📚
 
