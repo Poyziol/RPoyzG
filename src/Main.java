@@ -1,4 +1,4 @@
-package aff;
+import aff.Window;
 
 public class Main 
 {
