@@ -15,6 +15,8 @@ public class Entity
     int id_animation = 1;
 
     Rectangle solid_part;
+    int solid_part_x;
+    int solid_part_y;
     boolean collision = false;
 
     public int get_world_x() {

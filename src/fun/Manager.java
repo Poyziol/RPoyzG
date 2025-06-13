@@ -23,7 +23,7 @@ public class Manager
 
         nbr_map_tile = new int[game_panel.get_nbr_tile_world_max_h()][game_panel.get_nbr_tile_world_max_v()];
         get_tile_image();
-        load_map("/Map/GiantMap.txt");
+        load_map("/Map/Map.txt");
     }
 
     public Box get_game_panel()
@@ -56,6 +56,7 @@ public class Manager
             tab_block.add(new Tile());
             tab_block.get(4).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/stone1.png")));
             tab_block.add(new Tile());
+            tab_block.get(4).set_collision(true);
             tab_block.get(5).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/stone2.png")));
             tab_block.get(5).set_collision(true);
             tab_block.add(new Tile());
@@ -126,7 +127,14 @@ public class Manager
             int screen_x = world_x - game_panel.p1.get_world_x() + game_panel.p1.get_screen_x();
             int screen_y = world_y - game_panel.p1.get_world_y() + game_panel.p1.get_screen_y();
 
-            g2.drawImage(tab_block.get(nbr_tile).get_image(), screen_x, screen_y, game_panel.get_tile_size(),game_panel.get_tile_size(),null);
+            if(world_x + game_panel.get_tile_size() > game_panel.get_player().get_world_x() - game_panel.get_player().get_screen_x() &&
+               world_x - game_panel.get_tile_size() < game_panel.get_player().get_world_x() + game_panel.get_player().get_screen_x() &&
+               world_y + game_panel.get_tile_size() > game_panel.get_player().get_world_y() - game_panel.get_player().get_screen_y() &&
+               world_y - game_panel.get_tile_size() < game_panel.get_player().get_world_y() + game_panel.get_player().get_screen_y())
+            {
+                g2.drawImage(tab_block.get(nbr_tile).get_image(), screen_x, screen_y, game_panel.get_tile_size(),game_panel.get_tile_size(),null);
+            }
+            
             map_horizontale++;
 
             if(map_horizontale == game_panel.get_nbr_tile_world_max_h())

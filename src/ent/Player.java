@@ -2,8 +2,6 @@ package ent;
 
 import aff.*;
 import fun.*;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -45,8 +43,8 @@ public class Player extends Entity
     public void set_default_values()
     {
         direction = "down";
-        world_x = game_panel.get_tile_size() * 24;
-        world_y = game_panel.get_tile_size() * 13;
+        world_x = game_panel.get_tile_size() * 10;
+        world_y = game_panel.get_tile_size() * 10;
         entity_speed = 5;
     }
 

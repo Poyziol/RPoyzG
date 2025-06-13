@@ -2,6 +2,9 @@ package aff;
 
 import ent.*;
 import fun.*;
+import obj.*;
+import obj.SuperObject;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,29 +14,33 @@ import javax.swing.JPanel;
 public class Box extends JPanel implements Runnable
 {
     //Screen settings
-    final int original_tile_size = 16;                      ///taille 16x16 du perso
-    final int scale = 3;                                    //volume de resolution sur l ecran
+    final int original_tile_size = 16;                      // taille 16x16 du perso
+    final int scale = 3;                                    // volume de resolution sur l ecran
 
-    final int tile_size = original_tile_size * scale;       //48x48
-    final int nbr_tile_max_h = 16;
-    final int nbr_tile_max_v = 12;
+    final int tile_size = original_tile_size * scale;       // 48x48
+    final int nbr_tile_max_h = 16;                          // vue de l ecran horizontale
+    final int nbr_tile_max_v = 12;                          // vue de l ecran verticale
 
-    final int screen_width = tile_size * nbr_tile_max_h;    //768
-    final int screen_height = tile_size * nbr_tile_max_v;   //576
+    final int screen_width = tile_size * nbr_tile_max_h;    // 768
+    final int screen_height = tile_size * nbr_tile_max_v;   // 576
 
     //World srrings
-    final int max_world_h = 40;
-    final int max_world_v = 50;
-    final int max_world_width = tile_size * max_world_h;
-    final int max_world_height = tile_size * max_world_v;
+    final int max_world_h = 100;                            // nombre de cube horizontale de la map
+    final int max_world_v = 100;                            // nombre de cube verticale de la map
+    final int max_world_width = tile_size * max_world_h;    // Taille horizontale du monde
+    final int max_world_height = tile_size * max_world_v;   // Taille verticale du monde
 
-    int fps = 60;
-    Thread game_thread;
+    int fps = 60;                                           
+    Thread game_thread;                                 
     Key cle = new Key();
-    Collision collision = new Collision(this);
+
+    Collision collision = new Collision(this);              // collision 
+    Manager world_template = new Manager(this);             // gestion de jeu
+
 
     public Player p1 = new Player(this,cle);
-    Manager world_template = new Manager(this);
+    public Assets asset = new Assets(this);
+    public SuperObject obj[] = new SuperObject[10];
 
     public int get_nbr_tile_world_max_h()
     {
@@ -85,7 +92,13 @@ public class Box extends JPanel implements Runnable
         return this.collision;
     }
 
-    public Manager get_world_template() {
+    public Player get_player()
+    {
+        return this.p1;
+    }
+
+    public Manager get_world_template() 
+    {
         return this.world_template;
     }
 
@@ -96,7 +109,13 @@ public class Box extends JPanel implements Runnable
         this.setDoubleBuffered(true);
         this.addKeyListener(cle);
         this.setFocusable(true);
+        setup_game();
         start_game_thread();
+    }
+
+    public void setup_game()
+    {
+        asset.set_object();
     }
 
     public void start_game_thread()
@@ -150,7 +169,19 @@ public class Box extends JPanel implements Runnable
 
         Graphics2D g2 = (Graphics2D)g;
 
+        // TILE
         world_template.draw(g2);
+
+        // OBJECT
+        for(int ni = 0;ni < obj.length;ni++)
+        {
+            if(obj[ni] != null)
+            {
+                obj[ni].draw(g2, this);
+            }
+        }
+
+        // PLAYER
         p1.draw(g2);
 
         g2.dispose();
