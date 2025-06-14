@@ -2,7 +2,6 @@ package aff;
 
 import ent.*;
 import fun.*;
-import obj.*;
 import obj.SuperObject;
 
 import java.awt.Color;
@@ -27,16 +26,16 @@ public class Box extends JPanel implements Runnable
     //World srrings
     final int max_world_h = 100;                            // nombre de cube horizontale de la map
     final int max_world_v = 100;                            // nombre de cube verticale de la map
-    final int max_world_width = tile_size * max_world_h;    // Taille horizontale du monde
-    final int max_world_height = tile_size * max_world_v;   // Taille verticale du monde
 
     int fps = 60;                                           
     Thread game_thread;                                 
     Key cle = new Key();
 
+    UI ui = new UI(this);                                   // Ajout de l UI
     Collision collision = new Collision(this);              // collision 
     Manager world_template = new Manager(this);             // gestion de jeu
-
+    Sound sound = new Sound();                              // son du jeu (Background)
+    Sound sound_effect = new Sound();                       // son du jeu (Effet du jeu)
 
     public Player p1 = new Player(this,cle);
     public Assets asset = new Assets(this);
@@ -50,16 +49,6 @@ public class Box extends JPanel implements Runnable
     public int get_nbr_tile_world_max_v()
     {
         return this.max_world_v;
-    }
-
-    public int get_max_world_width()
-    {
-        return this.max_world_width;
-    }
-
-    public int get_max_world_height()
-    {
-        return this.max_world_height;
     }
 
     public int get_screen_width()
@@ -102,6 +91,16 @@ public class Box extends JPanel implements Runnable
         return this.world_template;
     }
 
+    public SuperObject[] get_obj()
+    {
+        return this.obj;
+    }
+
+    public UI get_ui()
+    {
+        return this.ui;
+    }
+
     public Box()
     {
         this.setPreferredSize(new Dimension(screen_width,screen_height));
@@ -116,6 +115,7 @@ public class Box extends JPanel implements Runnable
     public void setup_game()
     {
         asset.set_object();
+        play_music(3);
     }
 
     public void start_game_thread()
@@ -133,6 +133,7 @@ public class Box extends JPanel implements Runnable
         long actual_time;
         long timer = 0;
         int draw_time = 0;
+        System.out.println("FPS: " + fps);
 
         while(game_thread != null)
         {
@@ -151,7 +152,10 @@ public class Box extends JPanel implements Runnable
 
             if(timer >= 1000000000)
             {
-                System.out.println("FPS: " + draw_time);
+                if(draw_time != 60)
+                {
+                    System.out.println("FPS: " + draw_time);
+                }
                 timer = 0;
                 draw_time = 0;
             }
@@ -184,7 +188,27 @@ public class Box extends JPanel implements Runnable
         // PLAYER
         p1.draw(g2);
 
+        // UI
+        ui.draw(g2);
+
         g2.dispose();
     }
 
+    public void play_music(int ni)
+    {
+        sound.set_file(ni);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stop_music()
+    {
+        sound.stop();
+    }
+
+    public void play_sound_effect(int ni)
+    {
+        sound_effect.set_file(ni);
+        sound_effect.play();
+    }
 }

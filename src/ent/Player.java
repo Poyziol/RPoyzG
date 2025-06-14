@@ -15,16 +15,20 @@ public class Player extends Entity
 
     final int screen_x;
     final int screen_y;
+    int nbr_key = 0;
 
     public Player(Box new_game_panel, Key new_cle)
     {
         this.game_panel = new_game_panel;
         this.cle = new_cle;
 
-        solid_part = new Rectangle(10,10,25,38);
+        solid_part = new Rectangle(17,20,15,27);
 
         screen_x = game_panel.get_screen_width()/2 - (game_panel.get_tile_size()/2);
         screen_y = game_panel.get_screen_height()/2 - (game_panel.get_tile_size()/2);
+
+        solid_part_x = solid_part.x;
+        solid_part_y = solid_part.y;
 
         set_default_values();
         get_player_image();
@@ -40,12 +44,17 @@ public class Player extends Entity
         return this.screen_y;
     }
 
+    public int get_nbr_key()
+    {
+        return this.nbr_key;
+    }
+
     public void set_default_values()
     {
         direction = "down";
         world_x = game_panel.get_tile_size() * 10;
         world_y = game_panel.get_tile_size() * 10;
-        entity_speed = 5;
+        entity_speed = 3;
     }
 
     public void get_player_image()
@@ -88,11 +97,15 @@ public class Player extends Entity
             direction = "right";
         }
 
-        //Check tile collision
+        // Check tile collision
         collision = false;
         game_panel.get_collision().check_type_tile(this);
 
-        //if collision is false player can move
+        // Check object collision
+        int obj_index = game_panel.get_collision().check_object(this, true);
+        pickup_object(obj_index);
+
+        // if collision is false player can move
         if(collision == false)
         {
             switch (direction) {
@@ -127,6 +140,39 @@ public class Player extends Entity
 
             compteur_animation = 0;
         }
+        }
+    }
+
+    public void pickup_object(int index)
+    {
+        if(index != 999)
+        {
+            String obj_name = game_panel.get_obj()[index].getName();
+
+            switch(obj_name) 
+            {
+                case "key":
+                    game_panel.get_obj()[index] = null;
+                    game_panel.play_sound_effect(4);
+                    nbr_key++;
+                    game_panel.get_ui().show_message("You find a key!");
+                    break;
+                case "door":
+                    if(nbr_key > 0)
+                    {
+                        game_panel.get_obj()[index] = null;
+                        nbr_key--;
+                        game_panel.get_ui().show_message("Door unlocked!");
+                    }
+                    break;
+                case "boot":
+                    game_panel.get_obj()[index] = null;
+                    game_panel.play_sound_effect(4);
+                    entity_speed = 5;
+                    game_panel.get_ui().show_message("Speed up!");
+                default:
+                    break;
+            }
         }
     }
 

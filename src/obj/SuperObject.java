@@ -1,6 +1,7 @@
 package obj;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import aff.Box;
@@ -13,6 +14,9 @@ public class SuperObject
     public boolean collision = false;
     public int world_x;
     public int world_y;
+    public Rectangle solid_part = new Rectangle(0, 0, 48, 48);
+    public int solid_part_x = 0;
+    public int solid_part_y = 0;
 
     public BufferedImage getImage() 
     {
@@ -62,6 +66,21 @@ public class SuperObject
     public void setWorld_y(int world_y) 
     {
         this.world_y = world_y;
+    }
+
+    public Rectangle get_solid_part()
+    {
+        return this.solid_part;
+    }
+
+    public int get_solid_part_x()
+    {
+        return this.solid_part_x;
+    }
+
+    public int get_solid_part_y()
+    {
+        return this.solid_part_y;
     }
 
     public void draw(Graphics g, Box box)

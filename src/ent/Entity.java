@@ -82,4 +82,14 @@ public class Entity
         return this.solid_part;
     }
 
+    public int get_solid_part_x()
+    {
+        return this.solid_part_x;
+    }
+
+    public int get_solid_part_y()
+    {
+        return this.solid_part_y;
+    }
+
 }

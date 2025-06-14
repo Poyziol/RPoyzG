@@ -15,5 +15,7 @@ public class ObjectDoor extends SuperObject
         {
             e.printStackTrace();
         }
+
+        collision = true;
     }
 }

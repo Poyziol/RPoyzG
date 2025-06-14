@@ -1,6 +1,7 @@
 package fun;
 
 import aff.Box;
+import obj.ObjectBoot;
 import obj.ObjectDoor;
 import obj.ObjectKey;
 
@@ -40,5 +41,9 @@ public class Assets
         box.obj[5] = new ObjectDoor();
         box.obj[5].setWorld_x(36 * tileSize);
         box.obj[5].setWorld_y(93 * tileSize);
+
+        box.obj[6] = new ObjectBoot();
+        box.obj[6].setWorld_x(37 * tileSize);
+        box.obj[6].setWorld_y(7 * tileSize);
     }
 }
