@@ -173,6 +173,13 @@ public class Box extends JPanel implements Runnable
 
         Graphics2D g2 = (Graphics2D)g;
 
+        // DEBUG
+        long draw_start = 0;
+        if(cle.get_check_draw_time() == true)
+        {
+            draw_start = System.nanoTime();
+        }
+       
         // TILE
         world_template.draw(g2);
 
@@ -190,6 +197,16 @@ public class Box extends JPanel implements Runnable
 
         // UI
         ui.draw(g2);
+
+        // DEBUG
+        if(cle.get_check_draw_time() == true)
+        {
+            long draw_end = System.nanoTime();
+            long time_passed = draw_end - draw_start;
+            g2.setColor(Color.white);
+            g2.drawString("Draw time: " + time_passed, 10, 400); 
+            System.out.println("Draw time: " + time_passed);
+        }
 
         g2.dispose();
     }
@@ -211,4 +228,6 @@ public class Box extends JPanel implements Runnable
         sound_effect.set_file(ni);
         sound_effect.play();
     }
+
+    public native void salama();
 }

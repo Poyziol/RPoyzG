@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import aff.Box;
+import fun.Utility;
 
 public class SuperObject 
 
@@ -17,6 +18,7 @@ public class SuperObject
     public Rectangle solid_part = new Rectangle(0, 0, 48, 48);
     public int solid_part_x = 0;
     public int solid_part_y = 0;
+    Utility utility = new Utility();
 
     public BufferedImage getImage() 
     {

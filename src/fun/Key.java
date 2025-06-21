@@ -7,6 +7,14 @@ public class Key implements KeyListener
 {
     boolean up_pressed,down_pressed,left_pressed,right_pressed;
 
+    // DEBUG
+    boolean check_draw_time = false;
+
+    public boolean get_check_draw_time()
+    {
+        return this.check_draw_time;
+    }
+
     public boolean get_up_pressed()
     {
         return this.up_pressed;
@@ -66,6 +74,17 @@ public class Key implements KeyListener
         if(code == KeyEvent.VK_RIGHT)
         {
             right_pressed = true;
+        }
+        if(code == KeyEvent.VK_H)
+        {
+            if(check_draw_time == false)
+            {
+                check_draw_time = true;
+            }
+            if(check_draw_time == true)
+            {
+                check_draw_time = false;
+            }
         }
     }
 

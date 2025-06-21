@@ -2,11 +2,12 @@ package ent;
 
 import aff.*;
 import fun.*;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
+import java.awt.Color;
 
 public class Player extends Entity
 {
@@ -16,6 +17,7 @@ public class Player extends Entity
     final int screen_x;
     final int screen_y;
     int nbr_key = 0;
+    int compteur_move = 0;
 
     public Player(Box new_game_panel, Key new_cle)
     {
@@ -59,21 +61,34 @@ public class Player extends Entity
 
     public void get_player_image()
     {
-        try 
+
+        up1 = setup("p1_up1");
+        up2 = setup("p1_up2");
+        down1 = setup("p1_down1");
+        down2 = setup("p1_down2");
+        left1 = setup("p1_left1");
+        left2 = setup("p1_left2");
+        right1 = setup("p1_right1");
+        right2 = setup("p1_right2");
+
+    }
+
+    public BufferedImage setup(String image_name)
+    {
+        Utility utility = new Utility();
+        BufferedImage image = null;
+
+        try
         {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/Player/p1_up1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/Player/p1_up2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/Player/p1_down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/Player/p1_down2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/Player/p1_left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/Player/p1_left2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/Player/p1_right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/Player/p1_right2.png"));
+            image = ImageIO.read(getClass().getResourceAsStream("/Player/" + image_name + ".png"));
+            image = utility.scale_image(image, game_panel.get_tile_size(), game_panel.get_tile_size());
         } 
-        catch(IOException e) 
+        catch(Exception e) 
         {
             e.printStackTrace();
         }
+
+        return image;
     }
 
     public void update()
@@ -81,65 +96,75 @@ public class Player extends Entity
         if(cle.get_up_pressed() == true || cle.get_down_pressed() == true || cle.get_left_pressed() == true || cle.get_right_pressed() == true)
         {
             if(cle.get_up_pressed() == true)
-        {
-            direction = "up";
-        }
-        if(cle.get_down_pressed() == true)
-        {
-            direction = "down";
-        }
-        if(cle.get_left_pressed() == true)
-        {
-            direction = "left";
-        }
-        if(cle.get_right_pressed() == true)
-        {
-            direction = "right";
-        }
-
-        // Check tile collision
-        collision = false;
-        game_panel.get_collision().check_type_tile(this);
-
-        // Check object collision
-        int obj_index = game_panel.get_collision().check_object(this, true);
-        pickup_object(obj_index);
-
-        // if collision is false player can move
-        if(collision == false)
-        {
-            switch (direction) {
-                case "up":
-                world_y -= entity_speed;
-                    break;
-                case "down":
-                world_y += entity_speed;
-                    break;
-                case "left":
-                world_x -= entity_speed;
-                    break;
-                case "right":
-                world_x += entity_speed;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        compteur_animation++;
-        if(compteur_animation > 15)
-        {
-            if(id_animation == 1)
             {
-                id_animation = 2;
+                direction = "up";
             }
-            else if(id_animation == 2)
+            if(cle.get_down_pressed() == true)
+            {
+                direction = "down";
+            }
+            if(cle.get_left_pressed() == true)
+            {
+                direction = "left";
+            }
+            if(cle.get_right_pressed() == true)
+            {
+                direction = "right";
+            }
+
+            // Check tile collision
+            collision = false;
+            game_panel.get_collision().check_type_tile(this);
+
+            // Check object collision
+            int obj_index = game_panel.get_collision().check_object(this, true);
+            pickup_object(obj_index);
+
+            // if collision is false player can move
+            if(collision == false)
+            {
+                switch (direction) {
+                    case "up":
+                    world_y -= entity_speed;
+                        break;
+                    case "down":
+                    world_y += entity_speed;
+                        break;
+                    case "left":
+                    world_x -= entity_speed;
+                        break;
+                    case "right":
+                    world_x += entity_speed;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            compteur_animation++;
+            if(compteur_animation > 15)
+            {
+                if(id_animation == 1)
+                {
+                    id_animation = 2;
+                }
+                else if(id_animation == 2)
+                {
+                    id_animation = 1;
+                }
+
+                compteur_animation = 0;
+            }
+        }
+        else
+        {
+            compteur_move++;
+
+            if(compteur_move == 20)
             {
                 id_animation = 1;
+                compteur_move = 0;
             }
-
-            compteur_animation = 0;
-        }
         }
     }
 
@@ -226,7 +251,11 @@ public class Player extends Entity
                 break;
         }
 
-        g2.drawImage(image, screen_x, screen_y, game_panel.get_tile_size(),game_panel.get_tile_size(), null);
+        g2.drawImage(image, screen_x, screen_y, null);
+
+        // DEBUG affiche hit box
+        // g2.setColor(Color.red);
+        // g2.drawRect(screen_x + solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
     }
 
 }

@@ -19,7 +19,12 @@ public class Manager
     public Manager(Box new_game_panel)
     {
         this.game_panel = new_game_panel;
-        tab_block = new Vector<Tile>(); 
+        tab_block = new Vector<Tile>();
+
+        for (int i = 0; i < 10; i++) 
+        {
+            tab_block.add(new Tile());
+        }
 
         nbr_map_tile = new int[game_panel.get_nbr_tile_world_max_h()][game_panel.get_nbr_tile_world_max_v()];
         get_tile_image();
@@ -43,32 +48,28 @@ public class Manager
 
     public void get_tile_image()
     {
+        setup(0, "dirt1", false);
+        setup(1, "dirt2", false);
+        setup(2, "grass1", false);
+        setup(3, "grass2", false);
+        setup(4, "stone1", true);
+        setup(5, "stone2", true);
+        setup(6, "water1", true);
+        setup(7, "sand1", false);
+        setup(8, "tree1", true);
+        setup(9, "wood1", false);
+
+    }
+
+    public void setup(int index, String image_name, boolean collision)
+    {
+        Utility utility = new Utility();
+
         try 
         {
-            tab_block.add(new Tile());
-            tab_block.get(0).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/dirt1.png")));
-            tab_block.add(new Tile());
-            tab_block.get(1).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/dirt2.png")));
-            tab_block.add(new Tile());
-            tab_block.get(2).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/grass1.png")));
-            tab_block.add(new Tile());
-            tab_block.get(3).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/grass2.png")));
-            tab_block.add(new Tile());
-            tab_block.get(4).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/stone1.png")));
-            tab_block.add(new Tile());
-            tab_block.get(4).set_collision(true);
-            tab_block.get(5).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/stone2.png")));
-            tab_block.get(5).set_collision(true);
-            tab_block.add(new Tile());
-            tab_block.get(6).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/water1.png")));
-            tab_block.get(6).set_collision(true);
-            tab_block.add(new Tile());
-            tab_block.get(7).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/sand1.png")));
-            tab_block.add(new Tile());
-            tab_block.get(8).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/tree1.png")));
-            tab_block.get(8).set_collision(true);
-            tab_block.add(new Tile());
-            tab_block.get(9).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/wood1.png")));
+           tab_block.get(index).set_image(ImageIO.read(getClass().getResourceAsStream("/Background/" + image_name + ".png")));
+           tab_block.get(index).set_image(utility.scale_image(tab_block.get(index).get_image(), game_panel.get_tile_size(), game_panel.get_tile_size()));
+           tab_block.get(index).set_collision(collision);
         } 
         catch(IOException e) 
         {
@@ -132,7 +133,7 @@ public class Manager
                world_y + game_panel.get_tile_size() > game_panel.get_player().get_world_y() - game_panel.get_player().get_screen_y() &&
                world_y - game_panel.get_tile_size() < game_panel.get_player().get_world_y() + game_panel.get_player().get_screen_y())
             {
-                g2.drawImage(tab_block.get(nbr_tile).get_image(), screen_x, screen_y, game_panel.get_tile_size(),game_panel.get_tile_size(),null);
+                g2.drawImage(tab_block.get(nbr_tile).get_image(), screen_x, screen_y,null);
             }
             
             map_horizontale++;

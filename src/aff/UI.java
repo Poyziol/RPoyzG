@@ -18,7 +18,7 @@ public class UI
     int nbr_message = 0;
     boolean game_is_finished = false;
     double play_time;
-    DecimalFormat df = new DecimalFormat("#0.00");
+    DecimalFormat df = new DecimalFormat("#0.0");
 
     public UI(Box game_panel)
     {
@@ -26,7 +26,7 @@ public class UI
 
         arial_25 = new Font("Arial", Font.PLAIN, 25);
         arial_50B = new Font("Arial", Font.BOLD, 50);
-        ObjectKey key = new ObjectKey();
+        ObjectKey key = new ObjectKey(game_panel);
         key_image = key.getImage();
     }
 
