@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
-import java.awt.Color;
 
 public class Player extends Entity
 {

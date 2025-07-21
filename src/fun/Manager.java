@@ -21,7 +21,7 @@ public class Manager
         this.game_panel = new_game_panel;
         tab_block = new Vector<Tile>();
 
-        for (int i = 0; i < 10; i++) 
+        for (int i = 0; i < 50; i++) 
         {
             tab_block.add(new Tile());
         }
@@ -48,6 +48,7 @@ public class Manager
 
     public void get_tile_image()
     {
+        // old (Test)
         setup(0, "dirt1", false);
         setup(1, "dirt2", false);
         setup(2, "grass1", false);
@@ -58,6 +59,48 @@ public class Manager
         setup(7, "sand1", false);
         setup(8, "tree1", true);
         setup(9, "wood1", false);
+
+        // New 
+        setup(10, "dirt1", false);
+        setup(11, "dirt2", false);
+
+        setup(12, "grass1", false);
+        setup(13, "grass2", false);
+
+        setup(14, "stone1", true);
+        setup(15, "stone2", true);
+
+        setup(16, "water1", true);
+        setup(17, "water2-top", true);
+        setup(18, "water2-bottom", true);
+        setup(19, "water2-left", true);
+        setup(20, "water2-right", true);
+        setup(21, "water2-top-left", true);
+        setup(22, "water2-top-right", true);
+        setup(23, "water2-bottom-left", true);
+        setup(24, "water2-bottom-right", true);
+        setup(25, "water3-top", true);
+        setup(26, "water3-bottom", true);
+        setup(27, "water3-left", true);
+        setup(28, "water3-right", true);
+        setup(29, "water3-top-left", true);
+        setup(30, "water3-top-right", true);
+        setup(31, "water3-bottom-left", true);
+        setup(32, "water3-bottom-right", true);
+
+        setup(33, "sand1", false);
+        setup(34, "sand2-top", false);
+        setup(35, "sand2-bottom", false);
+        setup(36, "sand2-left", false);
+        setup(37, "sand2-right", false);
+        setup(38, "sand2-top-left", false);
+        setup(39, "sand2-top-right", false);
+        setup(40, "sand2-bottom-left", false);
+        setup(41, "sand2-bottom-right", false);
+
+        setup(42, "tree1", true);
+
+        setup(43, "wood1", false);
 
     }
 
