@@ -1,10 +1,18 @@
 package ent;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
+
+import aff.Box;
+import fun.Utility;
+
 public class Entity 
 {
+    Box game_panel;
+
     int world_x, world_y;
     int entity_speed;
 
@@ -12,12 +20,25 @@ public class Entity
     String direction;
 
     int compteur_animation = 0;
+    int npc_compteur_animation = 0;
     int id_animation = 1;
 
-    Rectangle solid_part;
+    Rectangle solid_part = new Rectangle(0, 0, 45, 41);
     int solid_part_x;
     int solid_part_y;
     boolean collision = false;
+
+    String dialogues[] = new String[20];
+    int compteur_dialogue = 0;
+
+    // Status
+    int max_life;
+    int life;
+    
+    public Entity(Box game_panel) 
+    {
+        this.game_panel = game_panel;
+    }
 
     public int get_world_x() {
         return world_x;
@@ -90,6 +111,195 @@ public class Entity
     public int get_solid_part_y()
     {
         return this.solid_part_y;
+    }
+
+    public void setWorld_x(int new_world_x)
+    {
+        this.world_x = new_world_x;
+    }
+
+    public void setWorld_y(int new_world_y)
+    {
+        this.world_y = new_world_y;
+    }
+
+    public int get_max_life()
+    {
+        return this.max_life;
+    }
+
+    public void set_max_life(int new_max_life)
+    {
+        this.max_life = new_max_life;
+    }
+
+    public int get_life()
+    {
+        return this.life;
+    }
+
+    public void set_life(int new_life)
+    {
+        this.life = new_life;
+    }
+
+    public BufferedImage setup(String image_path)
+    {
+        Utility utility = new Utility();
+        BufferedImage image = null;
+
+        try
+        {
+            image = ImageIO.read(getClass().getResourceAsStream(image_path + ".png"));
+            image = utility.scale_image(image, game_panel.get_tile_size(), game_panel.get_tile_size());
+        } 
+        catch(Exception e) 
+        {
+            e.printStackTrace();
+        }
+
+        return image;
+    }
+
+    public void speak() 
+    {
+        if(dialogues[compteur_dialogue] == null)
+        {
+            compteur_dialogue = 0;
+        }
+
+        game_panel.get_ui().set_dialogue(dialogues[compteur_dialogue]);
+        compteur_dialogue++;
+
+        switch (game_panel.p1.direction) 
+        {
+            case "up":
+                direction = "down";
+                break;
+
+            case "down":
+                direction = "up";
+                break;
+
+            case "left":
+                direction = "right";
+                break;
+
+            case "right":
+                direction = "left";
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    public void action() { }
+
+    public void update()
+    {
+        action();
+
+        collision = false;
+        game_panel.get_collision().check_type_tile(this);
+        game_panel.get_collision().check_object(this, false);
+        game_panel.get_collision().check_player(this);
+
+        if(collision == false)
+        {
+            switch (direction) 
+            {
+                case "up":
+                world_y -= entity_speed;
+                    break;
+                case "down":
+                world_y += entity_speed;
+                    break;
+                case "left":
+                world_x -= entity_speed;
+                    break;
+                case "right":
+                world_x += entity_speed;
+                    break;
+                default:
+                    break;
+            }
+        }
+        compteur_animation++;
+        if(compteur_animation > 12)
+        {
+            if(id_animation == 1)
+            {
+                id_animation = 2;
+            }
+            else if(id_animation == 2)
+            {
+                id_animation = 1;
+            }
+            compteur_animation = 0;
+        }
+    }
+
+    public void draw(Graphics2D g2)
+    {
+        BufferedImage image = null;
+
+        int screen_x = world_x - game_panel.p1.get_world_x() + game_panel.p1.get_screen_x();
+        int screen_y = world_y - game_panel.p1.get_world_y() + game_panel.p1.get_screen_y();
+
+        if(world_x + game_panel.get_tile_size() > game_panel.get_player().get_world_x() - game_panel.get_player().get_screen_x() &&
+           world_x - game_panel.get_tile_size() < game_panel.get_player().get_world_x() + game_panel.get_player().get_screen_x() &&
+           world_y + game_panel.get_tile_size() > game_panel.get_player().get_world_y() - game_panel.get_player().get_screen_y() &&
+           world_y - game_panel.get_tile_size() < game_panel.get_player().get_world_y() + game_panel.get_player().get_screen_y())
+        {
+            switch(direction) 
+            {
+                case "up":
+                    if(id_animation == 1)
+                    {
+                        image = up1;
+                    }
+                    if(id_animation == 2)
+                    {
+                        image = up2;
+                    }
+                    break;
+                case "down":
+                    if(id_animation == 1)
+                    {
+                        image = down1;
+                    }
+                    if(id_animation == 2)
+                    {
+                        image = down2;
+                    }
+                    break;
+                case "left":
+                    if(id_animation == 1)
+                    {
+                        image = left1;
+                    }
+                    if(id_animation == 2)
+                    {
+                        image = left2;
+                    }
+                    break;
+                case "right":
+                    if(id_animation == 1)
+                    {
+                        image = right1;
+                    }
+                    if(id_animation == 2)
+                    {
+                        image = right2;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            
+            g2.drawImage(image, screen_x, screen_y, game_panel.get_tile_size(),game_panel.get_tile_size(),null);
+        }
     }
 
 }

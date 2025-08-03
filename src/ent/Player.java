@@ -5,22 +5,20 @@ import fun.*;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.awt.Rectangle;
 
 public class Player extends Entity
 {
-    Box game_panel;
     Key cle;
 
     final int screen_x;
     final int screen_y;
-    int nbr_key = 0;
     int compteur_move = 0;
 
     public Player(Box new_game_panel, Key new_cle)
     {
-        this.game_panel = new_game_panel;
+        super(new_game_panel);
+
         this.cle = new_cle;
 
         solid_part = new Rectangle(17,20,15,27);
@@ -32,7 +30,7 @@ public class Player extends Entity
         solid_part_y = solid_part.y;
 
         set_default_values();
-        get_player_image();
+        get_image();
     }
 
     public int get_screen_x()
@@ -45,49 +43,30 @@ public class Player extends Entity
         return this.screen_y;
     }
 
-    public int get_nbr_key()
-    {
-        return this.nbr_key;
-    }
-
     public void set_default_values()
     {
         direction = "down";
         world_x = game_panel.get_tile_size() * 10;
         world_y = game_panel.get_tile_size() * 10;
         entity_speed = 3;
+
+        // Status
+        max_life = 6;
+        life = max_life;
     }
 
-    public void get_player_image()
+    public void get_image()
     {
 
-        up1 = setup("p1_up1");
-        up2 = setup("p1_up2");
-        down1 = setup("p1_down1");
-        down2 = setup("p1_down2");
-        left1 = setup("p1_left1");
-        left2 = setup("p1_left2");
-        right1 = setup("p1_right1");
-        right2 = setup("p1_right2");
+        up1 = setup("/Player/p1_up1");
+        up2 = setup("/Player/p1_up2");
+        down1 = setup("/Player/p1_down1");
+        down2 = setup("/Player/p1_down2");
+        left1 = setup("/Player/p1_left1");
+        left2 = setup("/Player/p1_left2");
+        right1 = setup("/Player/p1_right1");
+        right2 = setup("/Player/p1_right2");
 
-    }
-
-    public BufferedImage setup(String image_name)
-    {
-        Utility utility = new Utility();
-        BufferedImage image = null;
-
-        try
-        {
-            image = ImageIO.read(getClass().getResourceAsStream("/Player/" + image_name + ".png"));
-            image = utility.scale_image(image, game_panel.get_tile_size(), game_panel.get_tile_size());
-        } 
-        catch(Exception e) 
-        {
-            e.printStackTrace();
-        }
-
-        return image;
     }
 
     public void update()
@@ -118,6 +97,10 @@ public class Player extends Entity
             // Check object collision
             int obj_index = game_panel.get_collision().check_object(this, true);
             pickup_object(obj_index);
+
+            // Check NPC collision
+            int npc_index = game_panel.get_collision().check_entity(this, game_panel.npc);
+            npc_interaction(npc_index);
 
             // if collision is false player can move
             if(collision == false)
@@ -171,33 +154,22 @@ public class Player extends Entity
     {
         if(index != 999)
         {
-            String obj_name = game_panel.get_obj()[index].getName();
-
-            switch(obj_name) 
-            {
-                case "key":
-                    game_panel.get_obj()[index] = null;
-                    game_panel.play_sound_effect(4);
-                    nbr_key++;
-                    game_panel.get_ui().show_message("You find a key!");
-                    break;
-                case "door":
-                    if(nbr_key > 0)
-                    {
-                        game_panel.get_obj()[index] = null;
-                        nbr_key--;
-                        game_panel.get_ui().show_message("Door unlocked!");
-                    }
-                    break;
-                case "boot":
-                    game_panel.get_obj()[index] = null;
-                    game_panel.play_sound_effect(4);
-                    entity_speed = 5;
-                    game_panel.get_ui().show_message("Speed up!");
-                default:
-                    break;
-            }
+           
         }
+    }
+
+    public void npc_interaction(int index)
+    {
+        if(index != 999)
+        {
+            if(game_panel.get_key().get_enter_pressed() == true)
+            {
+                game_panel.set_game_state(game_panel.get_dialogue_state());
+                game_panel.npc[index].speak();
+            }   
+        }
+
+        game_panel.get_key().set_enter_pressed(false);
     }
 
     public void draw(Graphics2D g2)

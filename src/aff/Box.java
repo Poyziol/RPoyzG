@@ -27,9 +27,16 @@ public class Box extends JPanel implements Runnable
     final int max_world_h = 100;                            // nombre de cube horizontale de la map
     final int max_world_v = 100;                            // nombre de cube verticale de la map
 
+    //Game State
+    int game_state;                                         // Variable state
+    final int pause_state = 0;                              // State pour le pause
+    final int play_state = 1;                               // State pour le play
+    final int dialogue_state = 2;                           // State pour le dialogue
+    final int menu_state = 3;                               // State pour menu principal
+
     int fps = 60;                                           
     Thread game_thread;                                 
-    Key cle = new Key();
+    Key cle = new Key(this);
 
     UI ui = new UI(this);                                   // Ajout de l UI
     Collision collision = new Collision(this);              // collision 
@@ -40,6 +47,7 @@ public class Box extends JPanel implements Runnable
     public Player p1 = new Player(this,cle);
     public Assets asset = new Assets(this);
     public SuperObject obj[] = new SuperObject[10];
+    public Entity npc[] = new Entity[5];
 
     public int get_nbr_tile_world_max_h()
     {
@@ -101,6 +109,41 @@ public class Box extends JPanel implements Runnable
         return this.ui;
     }
 
+    public Key get_key()
+    {
+        return this.cle;
+    }
+
+    public int get_play_state()
+    {
+        return this.play_state;
+    }
+
+    public int get_pause_state()
+    {
+        return this.pause_state;
+    }
+
+    public int get_dialogue_state()
+    {
+        return this.dialogue_state;
+    }
+
+    public int get_menu_state()
+    {
+        return this.menu_state;
+    }
+
+    public int get_game_state()
+    {
+        return this.game_state;
+    }
+
+    public void set_game_state(int new_game_state)
+    {
+        this.game_state = new_game_state;
+    }
+
     public Box()
     {
         this.setPreferredSize(new Dimension(screen_width,screen_height));
@@ -115,7 +158,9 @@ public class Box extends JPanel implements Runnable
     public void setup_game()
     {
         asset.set_object();
-        play_music(3);
+        asset.set_npc();
+        //play_music(2);
+        game_state = menu_state;
     }
 
     public void start_game_thread()
@@ -164,7 +209,23 @@ public class Box extends JPanel implements Runnable
 
     public void update()
     {
-        p1.update();
+        if(game_state == play_state)
+        {   
+            //PLAYER
+            p1.update();
+            //NPC
+            for(int ni = 0; ni < npc.length;ni++)
+            {
+                if(npc[ni] != null)
+                {
+                    npc[ni].update();
+                }
+            }
+        }
+        if(game_state == pause_state)
+        {
+
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -179,24 +240,43 @@ public class Box extends JPanel implements Runnable
         {
             draw_start = System.nanoTime();
         }
-       
-        // TILE
-        world_template.draw(g2);
 
-        // OBJECT
-        for(int ni = 0;ni < obj.length;ni++)
+        // MAIN MENU
+        if(game_state == menu_state)
         {
-            if(obj[ni] != null)
-            {
-                obj[ni].draw(g2, this);
-            }
+            ui.draw(g2);
         }
 
-        // PLAYER
-        p1.draw(g2);
+        // OTHERS
+        else
+        {
+            // TILE
+            world_template.draw(g2);
 
-        // UI
-        ui.draw(g2);
+            // OBJECT
+            for(int ni = 0;ni < obj.length;ni++)
+            {
+                if(obj[ni] != null)
+                {
+                    obj[ni].draw(g2, this);
+                }
+            }
+
+            //NPC
+            for(int ji = 0;ji < npc.length;ji++)
+            {
+                if(npc[ji] != null)
+                {
+                    npc[ji].draw(g2);
+                }
+            }
+
+            // PLAYER
+            p1.draw(g2);
+
+            // UI
+            ui.draw(g2);
+        }
 
         // DEBUG
         if(cle.get_check_draw_time() == true)
