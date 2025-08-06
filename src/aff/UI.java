@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 
 import obj.ObjectLife;
-import obj.SuperObject;
+import ent.Entity;
 
 public class UI 
 {
@@ -36,7 +36,7 @@ public class UI
         arial_25 = new Font("Terminal", Font.PLAIN, 25);
         arial_50B = new Font("Terminal", Font.BOLD, 50);
 
-        SuperObject life = new ObjectLife(game_panel);
+        Entity life = new ObjectLife(game_panel);
         full_life = life.image3;
         half_life = life.image2;
         no_life = life.image;

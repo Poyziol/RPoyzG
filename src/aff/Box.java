@@ -2,12 +2,15 @@ package aff;
 
 import ent.*;
 import fun.*;
-import obj.SuperObject;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import javax.swing.JPanel;
 
 public class Box extends JPanel implements Runnable
@@ -35,10 +38,11 @@ public class Box extends JPanel implements Runnable
     final int menu_state = 3;                               // State pour menu principal
 
     int fps = 60;                                           
-    Thread game_thread;                                 
+    Thread game_thread;                               
     Key cle = new Key(this);
 
     UI ui = new UI(this);                                   // Ajout de l UI
+    Events events = new Events(this);                       // Ajout des events du jeu
     Collision collision = new Collision(this);              // collision 
     Manager world_template = new Manager(this);             // gestion de jeu
     Sound sound = new Sound();                              // son du jeu (Background)
@@ -46,8 +50,9 @@ public class Box extends JPanel implements Runnable
 
     public Player p1 = new Player(this,cle);
     public Assets asset = new Assets(this);
-    public SuperObject obj[] = new SuperObject[10];
+    public Entity obj[] = new Entity[10];
     public Entity npc[] = new Entity[5];
+    ArrayList<Entity> entity_list = new ArrayList<>();
 
     public int get_nbr_tile_world_max_h()
     {
@@ -94,12 +99,17 @@ public class Box extends JPanel implements Runnable
         return this.p1;
     }
 
+    public Events get_events()
+    {
+        return this.events;
+    }
+
     public Manager get_world_template() 
     {
         return this.world_template;
     }
 
-    public SuperObject[] get_obj()
+    public Entity[] get_obj()
     {
         return this.obj;
     }
@@ -253,26 +263,47 @@ public class Box extends JPanel implements Runnable
             // TILE
             world_template.draw(g2);
 
-            // OBJECT
-            for(int ni = 0;ni < obj.length;ni++)
+            // ADD TO ENTITYLIST
+            entity_list.add(p1);
+            for(int ni = 0;ni < npc.length;ni++)
             {
-                if(obj[ni] != null)
+                if(npc[ni] != null)
                 {
-                    obj[ni].draw(g2, this);
+                    entity_list.add(npc[ni]);
+                }
+            }
+            for(int ji = 0;ji < obj.length;ji++)
+            {
+                if(obj[ji] != null)
+                {
+                    entity_list.add(obj[ji]);
                 }
             }
 
-            //NPC
-            for(int ji = 0;ji < npc.length;ji++)
+            // SORT
+            Collections.sort(entity_list, new Comparator<Entity>() 
             {
-                if(npc[ji] != null)
+
+                @Override
+                public int compare(Entity e1, Entity e2) 
                 {
-                    npc[ji].draw(g2);
+                    int result = Integer.compare(e1.get_world_y(), e2.get_world_y());
+                    return result;
                 }
+                
+            });
+            
+            // DRAW ENTITIES
+            for(int ka = 0;ka < entity_list.size();ka++)
+            {
+                entity_list.get(ka).draw(g2);
             }
 
-            // PLAYER
-            p1.draw(g2);
+            // EMPTY ENTITY
+            for(int ka = 0;ka < entity_list.size();ka++)
+            {
+                entity_list.remove(ka);
+            }
 
             // UI
             ui.draw(g2);

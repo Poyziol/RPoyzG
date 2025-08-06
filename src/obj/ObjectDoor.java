@@ -1,26 +1,25 @@
 package obj;
 
-import javax.imageio.ImageIO;
-
 import aff.Box;
+import ent.Entity;
 
-public class ObjectDoor extends SuperObject
+public class ObjectDoor extends Entity
 {
     Box game_panel;
 
     public ObjectDoor(Box game_panel)
     {
+        super(game_panel);
         name = "door";
-        try 
-        {
-            image = ImageIO.read(getClass().getResourceAsStream("/items/door1.png"));
-            utility.scale_image(image, game_panel.get_tile_size(), game_panel.get_tile_size());
-        } 
-        catch(Exception e) 
-        {
-            e.printStackTrace();
-        }
+        
+        set_down1(setup("/items/door1"));
+        set_object_collision(true);
 
-        collision = true;
+        get_solid_part().x = 0;
+        get_solid_part().y = 16;
+        get_solid_part().width = 48;
+        get_solid_part().height = 32;
+        set_solid_part_x(get_solid_part().x);
+        set_solid_part_y(get_solid_part().y);
     }
 }

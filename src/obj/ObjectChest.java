@@ -1,26 +1,18 @@
 package obj;
 
-import javax.imageio.ImageIO;
-
 import aff.Box;
+import ent.Entity;
 
-public class ObjectChest extends SuperObject
+public class ObjectChest extends Entity
 {
     Box game_panel;
 
     public ObjectChest(Box game_panel)
     {
+        super(game_panel);
         name = "chest";
-        try 
-        {
-            image = ImageIO.read(getClass().getResourceAsStream("/items/chest1.png"));
-            utility.scale_image(image, game_panel.get_tile_size(), game_panel.get_tile_size());
-        } 
-        catch(Exception e) 
-        {
-            e.printStackTrace();
-        }
-
-        collision = true;
+        
+        set_down1(setup("/items/chest1"));
+        set_object_collision(true);
     }
 }

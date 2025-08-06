@@ -17,19 +17,25 @@ public class Entity
     int entity_speed;
 
     BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    String direction;
+    String direction = "down";
 
     int compteur_animation = 0;
     int npc_compteur_animation = 0;
     int id_animation = 1;
 
-    Rectangle solid_part = new Rectangle(0, 0, 45, 41);
+    Rectangle solid_part = new Rectangle(0, 16, 48, 32);
     int solid_part_x;
     int solid_part_y;
     boolean collision = false;
 
+    // Object options
     String dialogues[] = new String[20];
     int compteur_dialogue = 0;
+    Utility utility = new Utility();
+    boolean object_collision = false;
+
+    public BufferedImage image, image2, image3;
+    public String name;
 
     // Status
     int max_life;
@@ -38,6 +44,21 @@ public class Entity
     public Entity(Box game_panel) 
     {
         this.game_panel = game_panel;
+    }
+
+    public void set_down1(BufferedImage new_down1)
+    {
+        this.down1 = new_down1;
+    }
+
+    public boolean get_object_collision()
+    {
+        return this.object_collision;
+    }
+
+    public void set_object_collision(boolean new_object_collision)
+    {
+        this.object_collision = new_object_collision;
     }
 
     public int get_world_x() {
@@ -112,6 +133,16 @@ public class Entity
     {
         return this.solid_part_y;
     }
+
+    public void set_solid_part_x(int new_solid_part_x)
+    {
+        this.solid_part_x = new_solid_part_x;
+    }
+
+    public void set_solid_part_y(int new_solid_part_y)
+    {
+        this.solid_part_y = new_solid_part_y;
+    } 
 
     public void setWorld_x(int new_world_x)
     {

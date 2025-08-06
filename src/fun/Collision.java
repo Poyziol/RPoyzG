@@ -82,8 +82,8 @@ public class Collision
                 entity.get_solid_part().y = (int) (entity.get_world_y() + entity.get_solid_part().y);
 
                 // Object area solid position
-                game_panel.get_obj()[ni].get_solid_part().x = game_panel.get_obj()[ni].getWorld_x() + game_panel.get_obj()[ni].get_solid_part().x;
-                game_panel.get_obj()[ni].get_solid_part().y = game_panel.get_obj()[ni].getWorld_y() + game_panel.get_obj()[ni].get_solid_part().y;
+                game_panel.get_obj()[ni].get_solid_part().x = game_panel.get_obj()[ni].get_world_x() + game_panel.get_obj()[ni].get_solid_part().x;
+                game_panel.get_obj()[ni].get_solid_part().y = game_panel.get_obj()[ni].get_world_y() + game_panel.get_obj()[ni].get_solid_part().y;
 
                 switch(entity.getDirection()) 
                 {
@@ -91,7 +91,7 @@ public class Collision
                         entity.get_solid_part().y -= entity.getEntitySpeed();
                         if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
                         {
-                            if(game_panel.get_obj()[ni].collision == true)
+                            if(game_panel.get_obj()[ni].get_object_collision() == true)
                             {
                                 entity.set_collision(true);
                             }
@@ -105,7 +105,7 @@ public class Collision
                         entity.get_solid_part().y += entity.getEntitySpeed();
                         if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
                         {
-                            if(game_panel.get_obj()[ni].collision == true)
+                            if(game_panel.get_obj()[ni].get_object_collision() == true)
                             {
                                 entity.set_collision(true);
                             }
@@ -119,7 +119,7 @@ public class Collision
                         entity.get_solid_part().x -= entity.getEntitySpeed();
                         if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
                         {
-                            if(game_panel.get_obj()[ni].collision == true)
+                            if(game_panel.get_obj()[ni].get_object_collision() == true)
                             {
                                 entity.set_collision(true);
                             }
@@ -133,7 +133,7 @@ public class Collision
                         entity.get_solid_part().x += entity.getEntitySpeed();
                         if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
                         {
-                            if(game_panel.get_obj()[ni].collision == true)
+                            if(game_panel.get_obj()[ni].get_object_collision() == true)
                             {
                                 entity.set_collision(true);
                             }

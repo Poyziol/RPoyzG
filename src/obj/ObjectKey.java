@@ -1,24 +1,17 @@
 package obj;
 
-import javax.imageio.ImageIO;
-
 import aff.Box;
+import ent.Entity;
 
-public class ObjectKey extends SuperObject
+public class ObjectKey extends Entity
 {
-    Box game_panel;
 
     public ObjectKey(Box game_panel)
     {
+        super(game_panel);
         name = "key";
-        try 
-        {
-            image = ImageIO.read(getClass().getResourceAsStream("/items/key1.png"));
-            utility.scale_image(image, game_panel.get_tile_size(), game_panel.get_tile_size());
-        } 
-        catch(Exception e) 
-        {
-            e.printStackTrace();
-        }
+
+        set_down1(setup("/items/key1"));
+
     }
 }

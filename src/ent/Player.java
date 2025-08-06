@@ -21,7 +21,7 @@ public class Player extends Entity
 
         this.cle = new_cle;
 
-        solid_part = new Rectangle(17,20,15,27);
+        solid_part = new Rectangle(17,20,18,23);
 
         screen_x = game_panel.get_screen_width()/2 - (game_panel.get_tile_size()/2);
         screen_y = game_panel.get_screen_height()/2 - (game_panel.get_tile_size()/2);
@@ -102,6 +102,11 @@ public class Player extends Entity
             int npc_index = game_panel.get_collision().check_entity(this, game_panel.npc);
             npc_interaction(npc_index);
 
+            // Check events collision
+            game_panel.get_events().check_events();
+
+            game_panel.get_key().set_enter_pressed(false);
+
             // if collision is false player can move
             if(collision == false)
             {
@@ -168,8 +173,6 @@ public class Player extends Entity
                 game_panel.npc[index].speak();
             }   
         }
-
-        game_panel.get_key().set_enter_pressed(false);
     }
 
     public void draw(Graphics2D g2)
