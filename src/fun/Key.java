@@ -151,7 +151,7 @@ public class Key implements KeyListener
             }
             if(code == KeyEvent.VK_P)
             {
-                game_panel.set_game_state(game_panel.get_play_state());
+                game_panel.set_game_state(game_panel.get_pause_state());
             }
             if(code == KeyEvent.VK_ENTER)
             {
@@ -159,12 +159,12 @@ public class Key implements KeyListener
             }
         }
 
-        // Pause state
-        if(game_panel.get_game_state() == game_panel.get_play_state())
+        // Play state
+        if(game_panel.get_game_state() == game_panel.get_pause_state())
         {
             if(code == KeyEvent.VK_P)
             {
-                game_panel.set_game_state(game_panel.get_pause_state());
+                game_panel.set_game_state(game_panel.get_play_state());
             }
         }
 

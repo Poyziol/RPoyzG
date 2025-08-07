@@ -52,6 +52,7 @@ public class Box extends JPanel implements Runnable
     public Assets asset = new Assets(this);
     public Entity obj[] = new Entity[10];
     public Entity npc[] = new Entity[5];
+    public Entity mob[] = new Entity[50];
     ArrayList<Entity> entity_list = new ArrayList<>();
 
     public int get_nbr_tile_world_max_h()
@@ -169,6 +170,7 @@ public class Box extends JPanel implements Runnable
     {
         asset.set_object();
         asset.set_npc();
+        asset.set_mob();
         //play_music(2);
         game_state = menu_state;
     }
@@ -224,11 +226,19 @@ public class Box extends JPanel implements Runnable
             //PLAYER
             p1.update();
             //NPC
-            for(int ni = 0; ni < npc.length;ni++)
+            for(int ni = 0;ni < npc.length;ni++)
             {
                 if(npc[ni] != null)
                 {
                     npc[ni].update();
+                }
+            }
+            //MOB
+            for(int ji = 0;ji < mob.length;ji++)
+            {
+                if(mob[ji] != null)
+                {
+                    mob[ji].update();
                 }
             }
         }
@@ -279,6 +289,13 @@ public class Box extends JPanel implements Runnable
                     entity_list.add(obj[ji]);
                 }
             }
+            for(int ka = 0;ka < mob.length;ka++)
+            {
+                if(mob[ka] != null)
+                {
+                    entity_list.add(mob[ka]);
+                }
+            }
 
             // SORT
             Collections.sort(entity_list, new Comparator<Entity>() 
@@ -300,10 +317,7 @@ public class Box extends JPanel implements Runnable
             }
 
             // EMPTY ENTITY
-            for(int ka = 0;ka < entity_list.size();ka++)
-            {
-                entity_list.remove(ka);
-            }
+            entity_list.clear();
 
             // UI
             ui.draw(g2);

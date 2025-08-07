@@ -3,10 +3,14 @@ package ent;
 import aff.*;
 import fun.*;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 
+@SuppressWarnings("unused")
 public class Player extends Entity
 {
     Key cle;
@@ -71,7 +75,7 @@ public class Player extends Entity
 
     public void update()
     {
-        if(cle.get_up_pressed() == true || cle.get_down_pressed() == true || cle.get_left_pressed() == true || cle.get_right_pressed() == true)
+        if(cle.get_up_pressed() == true || cle.get_down_pressed() == true || cle.get_left_pressed() == true || cle.get_right_pressed() == true || cle.get_enter_pressed() == true)
         {
             if(cle.get_up_pressed() == true)
             {
@@ -102,13 +106,15 @@ public class Player extends Entity
             int npc_index = game_panel.get_collision().check_entity(this, game_panel.npc);
             npc_interaction(npc_index);
 
+            // Check Monsters collision
+            int mob_index = game_panel.get_collision().check_entity(this, game_panel.mob);
+            monster_interaction(mob_index);
+
             // Check events collision
             game_panel.get_events().check_events();
 
-            game_panel.get_key().set_enter_pressed(false);
-
             // if collision is false player can move
-            if(collision == false)
+            if(collision == false && cle.get_enter_pressed() == false)
             {
                 switch (direction) {
                     case "up":
@@ -127,6 +133,8 @@ public class Player extends Entity
                         break;
                 }
             }
+
+            game_panel.get_key().set_enter_pressed(false);
 
             compteur_animation++;
             if(compteur_animation > 15)
@@ -153,6 +161,17 @@ public class Player extends Entity
                 compteur_move = 0;
             }
         }
+
+        // Compteur invincible
+        if(invincible == true)
+        {
+            compteur_invinsible++;
+            if(compteur_invinsible > 60)
+            {
+                invincible = false;
+                compteur_invinsible = 0;
+            }
+        }
     }
 
     public void pickup_object(int index)
@@ -172,6 +191,18 @@ public class Player extends Entity
                 game_panel.set_game_state(game_panel.get_dialogue_state());
                 game_panel.npc[index].speak();
             }   
+        }
+    }
+
+    public void monster_interaction(int index)
+    {
+        if(index != 999)
+        {
+            if(invincible == false)
+            {
+                life -= 1;
+                invincible = true;
+            }
         }
     }
 
@@ -225,11 +256,22 @@ public class Player extends Entity
                 break;
         }
 
+        if(invincible == true)
+        {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+
         g2.drawImage(image, screen_x, screen_y, null);
 
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
         // DEBUG affiche hit box
-        // g2.setColor(Color.red);
-        // g2.drawRect(screen_x + solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
+        //g2.setFont(new Font("Arial", Font.PLAIN, 26));
+        //g2.setColor(Color.WHITE);
+        //g2.drawString("Invincible:" + compteur_invinsible, 10, 400);
+        //g2.setColor(Color.red);
+        //g2.drawRect(screen_x + solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
+
     }
 
 }

@@ -89,60 +89,28 @@ public class Collision
                 {
                     case "up":
                         entity.get_solid_part().y -= entity.getEntitySpeed();
-                        if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
-                        {
-                            if(game_panel.get_obj()[ni].get_object_collision() == true)
-                            {
-                                entity.set_collision(true);
-                            }
-                            if(player == true)
-                            {
-                                index = ni;
-                            }
-                        }
                         break;
                     case "down":
                         entity.get_solid_part().y += entity.getEntitySpeed();
-                        if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
-                        {
-                            if(game_panel.get_obj()[ni].get_object_collision() == true)
-                            {
-                                entity.set_collision(true);
-                            }
-                            if(player == true)
-                            {
-                                index = ni;
-                            }
-                        }
                         break;
                     case "left":
                         entity.get_solid_part().x -= entity.getEntitySpeed();
-                        if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
-                        {
-                            if(game_panel.get_obj()[ni].get_object_collision() == true)
-                            {
-                                entity.set_collision(true);
-                            }
-                            if(player == true)
-                            {
-                                index = ni;
-                            }
-                        }
                         break;
                     case "right":
                         entity.get_solid_part().x += entity.getEntitySpeed();
-                        if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
-                        {
-                            if(game_panel.get_obj()[ni].get_object_collision() == true)
-                            {
-                                entity.set_collision(true);
-                            }
-                            if(player == true)
-                            {
-                                index = ni;
-                            }
-                        }
                         break;
+                }
+
+                if(entity.get_solid_part().intersects(game_panel.get_obj()[ni].get_solid_part()))
+                {
+                    if(game_panel.get_obj()[ni].get_object_collision() == true)
+                    {
+                        entity.set_collision(true);
+                    }
+                    if(player == true)
+                    {
+                        index = ni;
+                    }
                 }
 
                 entity.get_solid_part().x = entity.get_solid_part_x();
@@ -175,36 +143,25 @@ public class Collision
                 {
                     case "up":
                         entity.get_solid_part().y -= entity.getEntitySpeed();
-                        if(entity.get_solid_part().intersects(target[ni].get_solid_part()))
-                        {
-                            entity.set_collision(true);
-                            index = ni;
-                        }
                         break;
                     case "down":
                         entity.get_solid_part().y += entity.getEntitySpeed();
-                        if(entity.get_solid_part().intersects(target[ni].get_solid_part()))
-                        {
-                            entity.set_collision(true);
-                            index = ni;
-                        }
                         break;
                     case "left":
                         entity.get_solid_part().x -= entity.getEntitySpeed();
-                        if(entity.get_solid_part().intersects(target[ni].get_solid_part()))
-                        {
-                            entity.set_collision(true);
-                            index = ni;
-                        }
                         break;
                     case "right":
                         entity.get_solid_part().x += entity.getEntitySpeed();
-                        if(entity.get_solid_part().intersects(target[ni].get_solid_part()))
-                        {
-                            entity.set_collision(true);
-                            index = ni;
-                        }
                         break;
+                }
+
+                if(entity.get_solid_part().intersects(target[ni].get_solid_part()))
+                {
+                    if(target[ni] != entity)
+                    {
+                        entity.set_collision(true);
+                        index = ni;
+                    }
                 }
 
                 entity.get_solid_part().x = entity.get_solid_part_x();
@@ -217,8 +174,10 @@ public class Collision
         return index;
     }
 
-    public void check_player(Entity entity)
+    public boolean check_player(Entity entity)
     {
+        boolean contact_player = false;
+
          // Entity area solid position
         entity.get_solid_part().x = (int) (entity.get_world_x() + entity.get_solid_part().x);
         entity.get_solid_part().y = (int) (entity.get_world_y() + entity.get_solid_part().y);
@@ -230,37 +189,28 @@ public class Collision
         {
             case "up":
                 entity.get_solid_part().y -= entity.getEntitySpeed();
-                if(entity.get_solid_part().intersects(game_panel.p1.get_solid_part()))
-                {
-                    entity.set_collision(true);
-                }
                 break;
             case "down":
                 entity.get_solid_part().y += entity.getEntitySpeed();
-                if(entity.get_solid_part().intersects(game_panel.p1.get_solid_part()))
-                {
-                    entity.set_collision(true);
-                }
                 break;
             case "left":
                 entity.get_solid_part().x -= entity.getEntitySpeed();
-                if(entity.get_solid_part().intersects(game_panel.p1.get_solid_part()))
-                {
-                    entity.set_collision(true);
-                }
                 break;
             case "right":
                 entity.get_solid_part().x += entity.getEntitySpeed();
-                if(entity.get_solid_part().intersects(game_panel.p1.get_solid_part()))
-                {
-                    entity.set_collision(true);
-                }
                 break;
-        
-            }
+        }
+        if(entity.get_solid_part().intersects(game_panel.p1.get_solid_part()))
+        {
+            entity.set_collision(true);
+            contact_player = true;
+        }
+
         entity.get_solid_part().x = entity.get_solid_part_x();
         entity.get_solid_part().y = entity.get_solid_part_y();     
         game_panel.p1.get_solid_part().x = game_panel.p1.get_solid_part_x();
         game_panel.p1.get_solid_part().y = game_panel.p1.get_solid_part_y();     
+
+        return contact_player;
     }
 }

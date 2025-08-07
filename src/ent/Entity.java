@@ -1,5 +1,6 @@
 package ent;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -9,6 +10,7 @@ import javax.imageio.ImageIO;
 import aff.Box;
 import fun.Utility;
 
+@SuppressWarnings("unused")
 public class Entity 
 {
     Box game_panel;
@@ -17,11 +19,15 @@ public class Entity
     int entity_speed;
 
     BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    BufferedImage attack_up1, attack_up2, attack_down1, attack_down2, attack_left1, attack_left2, attack_right1, attack_right2;
     String direction = "down";
 
     int compteur_animation = 0;
     int npc_compteur_animation = 0;
     int id_animation = 1;
+
+    // Player:0 - Entity:1 - Monster:2
+    int type;
 
     Rectangle solid_part = new Rectangle(0, 16, 48, 32);
     int solid_part_x;
@@ -34,8 +40,11 @@ public class Entity
     Utility utility = new Utility();
     boolean object_collision = false;
 
+    // Monster options
     public BufferedImage image, image2, image3;
     public String name;
+    boolean invincible = false;
+    int compteur_invinsible = 0;
 
     // Status
     int max_life;
@@ -46,9 +55,84 @@ public class Entity
         this.game_panel = game_panel;
     }
 
+    public int get_type()
+    {
+        return this.type;
+    }
+
+    public void set_type(int new_type)
+    {
+        this.type = new_type;
+    }
+
+    public boolean get_invincible()
+    {
+        return this.invincible;
+    }
+
+    public void set_invincible(boolean new_invincible)
+    {
+        this.invincible = new_invincible;
+    }
+
+    public int get_compteur_invincible()
+    {
+        return this.compteur_invinsible;
+    }
+
+    public void set_compteur_invincible(int new_compteur_invincible)
+    {
+        this.compteur_invinsible = new_compteur_invincible;
+    }
+
     public void set_down1(BufferedImage new_down1)
     {
         this.down1 = new_down1;
+    }
+
+    public void set_down2(BufferedImage new_down2)
+    {
+        this.down2 = new_down2;
+    }
+
+    public void set_up1(BufferedImage new_up1)
+    {
+        this.up1 = new_up1;
+    }
+
+    public void set_up2(BufferedImage new_up2)
+    {
+        this.up2 = new_up2;
+    }
+
+    public void set_left1(BufferedImage new_left1)
+    {
+        this.left1 = new_left1;
+    }
+
+    public void set_left2(BufferedImage new_left2)
+    {
+        this.left2 = new_left2;
+    }
+
+    public void set_right1(BufferedImage new_right1)
+    {
+        this.right1 = new_right1;
+    }
+
+    public void set_right2(BufferedImage new_right2)
+    {
+        this.right2 = new_right2;
+    }
+
+    public int get_npc_compteur_animation()
+    {
+        return this.npc_compteur_animation;
+    }
+
+    public void set_npc_compteur_animation(int new_npc_compteur_animation)
+    {
+        this.npc_compteur_animation = new_npc_compteur_animation;
     }
 
     public boolean get_object_collision()
@@ -71,6 +155,11 @@ public class Entity
 
     public int getEntitySpeed() {
         return entity_speed;
+    }
+
+    public void set_entity_speed(int new_entity_speed)
+    {
+        this.entity_speed = new_entity_speed;
     }
 
     public BufferedImage getUp1() {
@@ -107,6 +196,11 @@ public class Entity
 
     public String getDirection() {
         return direction;
+    }
+
+    public void set_direction(String new_direction)
+    {
+        this.direction = new_direction;
     }
 
     public void set_collision(boolean new_collision)
@@ -234,7 +328,18 @@ public class Entity
         collision = false;
         game_panel.get_collision().check_type_tile(this);
         game_panel.get_collision().check_object(this, false);
-        game_panel.get_collision().check_player(this);
+        game_panel.get_collision().check_entity(this, game_panel.npc);
+        game_panel.get_collision().check_entity(this, game_panel.mob);
+        boolean contact_player = game_panel.get_collision().check_player(this);
+
+        if(this.type == 2 && contact_player == true)
+        {
+            if(game_panel.get_player().get_invincible() == false)
+            {
+                game_panel.get_player().set_life(game_panel.get_player().get_life() - 1);
+                game_panel.get_player().set_invincible(true);
+            }
+        }
 
         if(collision == false)
         {
@@ -330,6 +435,10 @@ public class Entity
             }
             
             g2.drawImage(image, screen_x, screen_y, game_panel.get_tile_size(),game_panel.get_tile_size(),null);
+
+            // DEBUG
+            //g2.setColor(Color.red);
+            //g2.drawRect(screen_x +solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
         }
     }
 
