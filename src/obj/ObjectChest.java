@@ -12,7 +12,7 @@ public class ObjectChest extends Entity
         super(game_panel);
         name = "chest";
         
-        set_down1(setup("/items/chest1"));
+        set_down1(setup("/items/chest1", game_panel.get_tile_size(), game_panel.get_tile_size()));
         set_object_collision(true);
     }
 }

@@ -12,6 +12,6 @@ public class ObjectBoot extends Entity
         super(game_panel);
         name = "boot";
         
-        set_down1(setup("items/boot1"));
+        set_down1(setup("items/boot1", game_panel.get_tile_size(), game_panel.get_tile_size()));
     }
 }

@@ -19,14 +19,14 @@ public class Npc_old_man extends Entity
 
     public void get_image()
     {
-        up1 = setup("/NPC/npc2-top1");
-        up2 = setup("/NPC/npc2-top2");
-        down1 = setup("/NPC/npc2-bottom1");
-        down2 = setup("/NPC/npc2-bottom2");
-        left1 = setup("/NPC/npc2-left1");
-        left2 = setup("/NPC/npc2-left2");
-        right1 = setup("/NPC/npc2-right1");
-        right2 = setup("/NPC/npc2-right2");
+        up1 = setup("/NPC/npc2-top1", game_panel.get_tile_size(), game_panel.get_tile_size());
+        up2 = setup("/NPC/npc2-top2", game_panel.get_tile_size(), game_panel.get_tile_size());
+        down1 = setup("/NPC/npc2-bottom1", game_panel.get_tile_size(), game_panel.get_tile_size());
+        down2 = setup("/NPC/npc2-bottom2", game_panel.get_tile_size(), game_panel.get_tile_size());
+        left1 = setup("/NPC/npc2-left1", game_panel.get_tile_size(), game_panel.get_tile_size());
+        left2 = setup("/NPC/npc2-left2", game_panel.get_tile_size(), game_panel.get_tile_size());
+        right1 = setup("/NPC/npc2-right1", game_panel.get_tile_size(), game_panel.get_tile_size());
+        right2 = setup("/NPC/npc2-right2", game_panel.get_tile_size(), game_panel.get_tile_size());
     }
 
     public void set_dialogue()

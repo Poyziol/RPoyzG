@@ -1,5 +1,6 @@
 package ent;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -30,9 +31,11 @@ public class Entity
     int type;
 
     Rectangle solid_part = new Rectangle(0, 16, 48, 32);
+    Rectangle attack_part = new Rectangle(0, 0, 0, 0);
     int solid_part_x;
     int solid_part_y;
     boolean collision = false;
+    boolean is_attacking = false;
 
     // Object options
     String dialogues[] = new String[20];
@@ -45,6 +48,11 @@ public class Entity
     public String name;
     boolean invincible = false;
     int compteur_invinsible = 0;
+    boolean is_alive = true;
+    boolean is_dead = false;
+    int compteur_dead = 0;
+    boolean hp_bar_on = false;
+    int compteur_hp_bar = 0;
 
     // Status
     int max_life;
@@ -53,6 +61,31 @@ public class Entity
     public Entity(Box game_panel) 
     {
         this.game_panel = game_panel;
+    }
+
+    public Box get_game_panel()
+    {
+        return this.game_panel;
+    }
+
+    public boolean get_is_alive()
+    {
+        return this.is_alive;
+    }
+
+    public void set_is_alive(boolean new_is_alive)
+    {
+        this.is_alive = new_is_alive;
+    }
+
+    public boolean get_is_dead()
+    {
+        return this.is_dead;
+    }
+
+    public void set_is_dead(boolean new_is_dead)
+    {
+        this.is_dead = new_is_dead;
     }
 
     public int get_type()
@@ -268,7 +301,7 @@ public class Entity
         this.life = new_life;
     }
 
-    public BufferedImage setup(String image_path)
+    public BufferedImage setup(String image_path, int image_width, int image_height)
     {
         Utility utility = new Utility();
         BufferedImage image = null;
@@ -276,7 +309,7 @@ public class Entity
         try
         {
             image = ImageIO.read(getClass().getResourceAsStream(image_path + ".png"));
-            image = utility.scale_image(image, game_panel.get_tile_size(), game_panel.get_tile_size());
+            image = utility.scale_image(image,image_width, image_height);
         } 
         catch(Exception e) 
         {
@@ -321,6 +354,8 @@ public class Entity
 
     public void action() { }
 
+    public void damage_reaction() { }
+
     public void update()
     {
         action();
@@ -336,6 +371,7 @@ public class Entity
         {
             if(game_panel.get_player().get_invincible() == false)
             {
+                game_panel.play_sound_effect(5);
                 game_panel.get_player().set_life(game_panel.get_player().get_life() - 1);
                 game_panel.get_player().set_invincible(true);
             }
@@ -373,6 +409,17 @@ public class Entity
                 id_animation = 1;
             }
             compteur_animation = 0;
+        }
+
+        // Compteur invincible
+        if(invincible == true)
+        {
+            compteur_invinsible++;
+            if(compteur_invinsible > 40)
+            {
+                invincible = false;
+                compteur_invinsible = 0;
+            }
         }
     }
 
@@ -433,8 +480,42 @@ public class Entity
                 default:
                     break;
             }
+
+            // Monster health bar
+            if(type == 2 && hp_bar_on == true)
+            {
+                double one_scale = (double)game_panel.get_tile_size() / max_life;
+                double hp_par_value = one_scale * life;
+
+                g2.setColor(new Color(12,12,12));
+                g2.fillRect(screen_x - 1, screen_y - 13, game_panel.get_tile_size() + 2, 10);
+
+                g2.setColor(new Color(255,0,30));
+                g2.fillRect(screen_x, screen_y - 12, (int)hp_par_value, 8);
+
+                compteur_hp_bar++;
+
+                if(compteur_hp_bar > 600)
+                {
+                    compteur_hp_bar = 0;
+                    hp_bar_on = false;
+                }
+            }
+
+            if(invincible == true)
+            {
+                hp_bar_on = true;
+                compteur_hp_bar = 0;
+                change_opacity(g2, 0.5f);
+            }
+            if(is_dead == true)
+            {
+                dying_animation(g2);
+            }
             
             g2.drawImage(image, screen_x, screen_y, game_panel.get_tile_size(),game_panel.get_tile_size(),null);
+
+            change_opacity(g2, 1f);
 
             // DEBUG
             //g2.setColor(Color.red);
@@ -442,4 +523,52 @@ public class Entity
         }
     }
 
+    public void dying_animation(Graphics2D g2)
+    {
+        compteur_dead++;
+        int ni = 5;
+
+        if(compteur_dead <= ni)
+        {
+            change_opacity(g2, 0f);
+        }
+        if(compteur_dead > ni && compteur_dead <= ni * 2)
+        {
+            change_opacity(g2, 1f);
+        }
+        if(compteur_dead > ni * 2 && compteur_dead <= ni * 3)
+        {
+            change_opacity(g2, 0f);
+        }
+        if(compteur_dead > ni * 3 && compteur_dead <= ni * 4)
+        {
+            change_opacity(g2, 1f);
+        }
+        if(compteur_dead > ni * 4 && compteur_dead <= ni * 5)
+        {
+            change_opacity(g2, 0f);
+        }
+        if(compteur_dead > ni * 5 && compteur_dead <= ni * 6)
+        {
+            change_opacity(g2, 1f);
+        }
+        if(compteur_dead > ni * 6 && compteur_dead <= ni * 7)
+        {
+            change_opacity(g2, 0f);
+        }
+        if(compteur_dead > ni * 7 && compteur_dead <= ni * 8)
+        {
+            change_opacity(g2, 1f);
+        }
+        if(compteur_dead > ni * 8)
+        {
+            is_dead = false;
+            is_alive = false;
+        }
+    }
+
+    public void change_opacity(Graphics2D g2, float alpha_value)
+    {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha_value));
+    }
 }

@@ -51,8 +51,8 @@ public class Events
 
         if(can_touch_event == true)
         {
-            if(hit(11, 11, "any") == true) { take_damage(11, 11, game_panel.get_dialogue_state()); }
-            if(hit(11, 11, "right") == true) { heal(11, 11, game_panel.get_dialogue_state()); }
+            //if(hit(11, 11, "any") == true) { take_damage(11, 11, game_panel.get_dialogue_state()); }
+            //if(hit(11, 11, "right") == true) { heal(11, 11, game_panel.get_dialogue_state()); }
             //if(hit(11, 11, "right") == true) { teleport(11, 11, game_panel.get_dialogue_state()); }
         }
     }

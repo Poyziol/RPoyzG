@@ -13,7 +13,7 @@ public class GreenSlime extends Entity
         name = "green slime";
         set_type(2);
         set_entity_speed(1);
-        set_max_life(4);
+        set_max_life(10);
         set_life(get_max_life());
 
         get_solid_part().x = 0;
@@ -28,14 +28,14 @@ public class GreenSlime extends Entity
     
     public void get_image()
     {
-        set_up1(setup("/Monsters/slime-down1"));
-        set_up2(setup("/Monsters/slime-down2"));
-        set_left1(setup("/Monsters/slime-down1"));
-        set_left2(setup("/Monsters/slime-down2"));
-        set_right1(setup("/Monsters/slime-down1"));
-        set_right2(setup("/Monsters/slime-down2"));
-        set_down1(setup("/Monsters/slime-down1"));
-        set_down2(setup("/Monsters/slime-down2"));
+        set_up1(setup("/Monsters/slime-down1", get_game_panel().get_tile_size(), get_game_panel().get_tile_size()));
+        set_up2(setup("/Monsters/slime-down2", get_game_panel().get_tile_size(), get_game_panel().get_tile_size()));
+        set_left1(setup("/Monsters/slime-down1", get_game_panel().get_tile_size(), get_game_panel().get_tile_size()));
+        set_left2(setup("/Monsters/slime-down2", get_game_panel().get_tile_size(), get_game_panel().get_tile_size()));
+        set_right1(setup("/Monsters/slime-down1", get_game_panel().get_tile_size(), get_game_panel().get_tile_size()));
+        set_right2(setup("/Monsters/slime-down2", get_game_panel().get_tile_size(), get_game_panel().get_tile_size()));
+        set_down1(setup("/Monsters/slime-down1", get_game_panel().get_tile_size(), get_game_panel().get_tile_size()));
+        set_down2(setup("/Monsters/slime-down2", get_game_panel().get_tile_size(), get_game_panel().get_tile_size()));
     }
 
     public void action()
@@ -66,5 +66,10 @@ public class GreenSlime extends Entity
 
             set_npc_compteur_animation(0);
         }
+    }
+
+    public void damage_reaction()
+    {
+        set_npc_compteur_animation(0);
     }
 }

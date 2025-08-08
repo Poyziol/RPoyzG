@@ -100,7 +100,7 @@ public class Key implements KeyListener
         }
 
         // Play state
-        if(game_panel.get_game_state() == game_panel.get_play_state())
+        else if(game_panel.get_game_state() == game_panel.get_play_state())
         {
             if(code == KeyEvent.VK_W)
             {

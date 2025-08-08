@@ -12,7 +12,7 @@ public class ObjectDoor extends Entity
         super(game_panel);
         name = "door";
         
-        set_down1(setup("/items/door1"));
+        set_down1(setup("/items/door1", game_panel.get_tile_size(), game_panel.get_tile_size()));
         set_object_collision(true);
 
         get_solid_part().x = 0;

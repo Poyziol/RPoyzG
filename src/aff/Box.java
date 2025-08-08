@@ -238,7 +238,14 @@ public class Box extends JPanel implements Runnable
             {
                 if(mob[ji] != null)
                 {
-                    mob[ji].update();
+                    if(mob[ji].get_is_alive() == true && mob[ji].get_is_dead() == false)
+                    {
+                        mob[ji].update();
+                    }
+                    if(mob[ji].get_is_alive() == false)
+                    {
+                        mob[ji] = null;
+                    }
                 }
             }
         }

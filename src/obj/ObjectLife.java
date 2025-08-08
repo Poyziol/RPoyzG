@@ -11,8 +11,8 @@ public class ObjectLife extends Entity
     {
         super(game_panel);
         name = "life";
-        image = setup("/items/life0");
-        image2 = setup("/items/life1-red");
-        image3 = setup("/items/life2-red");
+        image = setup("/items/life0", game_panel.get_tile_size(), game_panel.get_tile_size());
+        image2 = setup("/items/life1-red", game_panel.get_tile_size(), game_panel.get_tile_size());
+        image3 = setup("/items/life2-red", game_panel.get_tile_size(), game_panel.get_tile_size());
     }
 }
