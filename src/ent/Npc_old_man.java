@@ -34,9 +34,11 @@ public class Npc_old_man extends Entity
         dialogues[0] = "HOHO! Bonjour cher aventurier!";
         dialogues[1] = "Il semblerait que vous soyiez reveille d'un\n long sommeil";
         dialogues[2] = "C'est plutot rare de trouver des personnes\n dans les environs";
-        dialogues[3] = "Moi? mon nom est Moz, j etais jadis le \ndoyen de Artaziol";
-        dialogues[4] = "Les chemins par ici gargouille de monstres\n et sont semer d'embuche!";
+        dialogues[3] = "Moi? mon nom est Moz, j etais jadis le \ndoyen de Artaziol avant le grand desastre.";
+        dialogues[4] = "Les chemins par ici gargouille de monstres\n faites attention.";
         dialogues[5] = "Soyez pret a tout heure! Ces molusques vert \nont fait bien trop de ravages!";
+        dialogues[6] = "Si vous voulez les attaquer, utilisez la \ntouche ENTRER";
+        dialogues[7] = "Appuyer sur E pour voir le menu status et \noutils de votre personnage";
     }
 
     public void action()

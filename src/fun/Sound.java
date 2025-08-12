@@ -13,14 +13,15 @@ public class Sound
 
     public Sound()
     {
-        sound_url[0] = getClass().getResource("/Music/InTheDesert.wav");
-        sound_url[1] = getClass().getResource("/Music/InTheDungeon.wav");
-        sound_url[2] = getClass().getResource("/Music/InTheForrest.wav");
+        sound_url[0] = getClass().getResource("/Music/gameover.wav");
+        sound_url[1] = getClass().getResource("/Music/potion.wav");
+        sound_url[2] = getClass().getResource("/Music/levelup.wav");
         sound_url[3] = getClass().getResource("/Music/MainSong.wav");
         sound_url[4] = getClass().getResource("/Music/PickItem.wav");
         sound_url[5] = getClass().getResource("/Music/receivedamage.wav");
         sound_url[6] = getClass().getResource("/Music/hitmonster.wav");
         sound_url[7] = getClass().getResource("/Music/swordhit.wav");
+        sound_url[8] = getClass().getResource("/Music/cursor.wav");
     }
 
     public void set_file(int ni)

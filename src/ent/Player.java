@@ -2,12 +2,16 @@ package ent;
 
 import aff.*;
 import fun.*;
+import obj.ObjectKey;
+import obj.ObjectShield1;
+import obj.ObjectSword1;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.awt.Rectangle;
 
 @SuppressWarnings("unused")
@@ -18,6 +22,9 @@ public class Player extends Entity
     final int screen_x;
     final int screen_y;
     int compteur_move = 0;
+    boolean attack_canceled = false;
+    ArrayList<Entity> inventory = new ArrayList<>();
+    final int inventory_size = 28;
 
     public Player(Box new_game_panel, Key new_cle)
     {
@@ -33,14 +40,25 @@ public class Player extends Entity
         solid_part_x = solid_part.x;
         solid_part_y = solid_part.y;
 
-        attack_part.x = 16;
-        attack_part.y = 5;
-        attack_part.width = 25;
-        attack_part.height = 35;
-
         set_default_values();
         get_image();
         get_attack_image();
+        set_items();
+    }
+
+    public int get_inventory_size()
+    {
+        return this.inventory_size;
+    }
+
+    public ArrayList<Entity> get_inventory()
+    {
+        return this.inventory;
+    }
+
+    public void set_attack_canceled(boolean new_attack_canceled)
+    {
+        this.attack_canceled = new_attack_canceled;
     }
 
     public int get_screen_x()
@@ -56,13 +74,55 @@ public class Player extends Entity
     public void set_default_values()
     {
         direction = "down";
-        world_x = game_panel.get_tile_size() * 10;
-        world_y = game_panel.get_tile_size() * 10;
+        world_x = game_panel.get_tile_size() * 2;
+        world_y = game_panel.get_tile_size() * 2;
         entity_speed = 3;
 
         // Status
+        level = 1;
         max_life = 6;
         life = max_life;
+        strength = 1;
+        dexterity = 1;
+        exp = 0;
+        next_lvl_exp = 10;
+        coin = 0;
+        current_weapon = new ObjectSword1(game_panel);
+        current_shield = new ObjectShield1(game_panel);
+        attack = get_attack();
+        defense = get_defense();
+    }
+
+    public void set_default_positions()
+    {
+        direction = "down";
+        world_x = game_panel.get_tile_size() * 2;
+        world_y = game_panel.get_tile_size() * 2;
+    }
+
+    public void restore_life_and_mana()
+    {
+        life = max_life;
+        invincible = false;
+    }
+
+    public void set_items()
+    {
+        inventory.clear();
+        inventory.add(current_weapon);
+        inventory.add(current_shield);
+        //inventory.add(new ObjectKey(game_panel));
+    }
+
+    public int get_attack()
+    {
+        attack_part = current_weapon.attack_part;
+        return attack = strength * current_weapon.attack_value;
+    }
+
+    public int get_defense()
+    {
+        return defense = dexterity * current_shield.defense_value;
     }
 
     public void get_image()
@@ -81,14 +141,29 @@ public class Player extends Entity
 
     public void get_attack_image()
     {
-        attack_up1 = setup("/Player/attack-up1", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
-        attack_up2 = setup("/Player/attack-up2", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
-        attack_down1 = setup("/Player/attack-down1", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
-        attack_down2 = setup("/Player/attack-down2", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
-        attack_left1 = setup("/Player/attack-left1", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
-        attack_left2 = setup("/Player/attack-left2", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
-        attack_right1 = setup("/Player/attack-right1", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
-        attack_right2 = setup("/Player/attack-right2", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+        if(current_weapon.type == type_sword)
+        {
+            attack_up1 = setup("/Player/attack-up1", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
+            attack_up2 = setup("/Player/attack-up2", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
+            attack_down1 = setup("/Player/attack-down1", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
+            attack_down2 = setup("/Player/attack-down2", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
+            attack_left1 = setup("/Player/attack-left1", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+            attack_left2 = setup("/Player/attack-left2", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+            attack_right1 = setup("/Player/attack-right1", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+            attack_right2 = setup("/Player/attack-right2", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+        }
+        if(current_weapon.type == type_axe)
+        {
+            attack_up1 = setup("/Player/axe-up1", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
+            attack_up2 = setup("/Player/axe-up2", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
+            attack_down1 = setup("/Player/axe-down1", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
+            attack_down2 = setup("/Player/axe-down2", game_panel.get_tile_size(), game_panel.get_tile_size() * 2);
+            attack_left1 = setup("/Player/axe-left1", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+            attack_left2 = setup("/Player/axe-left2", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+            attack_right1 = setup("/Player/axe-right1", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+            attack_right2 = setup("/Player/axe-right2", game_panel.get_tile_size() * 2, game_panel.get_tile_size());
+        }
+        
     }
 
     public void update()
@@ -157,6 +232,14 @@ public class Player extends Entity
                 }
             }
 
+            if(cle.get_enter_pressed() == true && attack_canceled == false)
+            {
+                game_panel.play_sound_effect(7);
+                is_attacking = true;
+                compteur_animation = 0;
+            }
+
+            attack_canceled = false;
             game_panel.get_key().set_enter_pressed(false);
 
             compteur_animation++;
@@ -194,6 +277,12 @@ public class Player extends Entity
                 invincible = false;
                 compteur_invinsible = 0;
             }
+        }
+
+        if(life <= 0)
+        {
+            game_panel.set_game_state(game_panel.get_game_over_state());
+            game_panel.play_sound_effect(0);
         }
     }
 
@@ -260,7 +349,21 @@ public class Player extends Entity
     {
         if(index != 999)
         {
-           
+            String text;
+
+           if(inventory.size() != inventory_size)
+           {
+                inventory.add(game_panel.obj[index]);
+                game_panel.play_sound_effect(4);
+                text = "You got a " + game_panel.obj[index].name + "!";
+           }
+           else
+           {
+                text = "You can t take it! \nYour inventory is full!";
+           }
+
+           game_panel.get_ui().show_message(text);
+           game_panel.obj[index] = null;
         }
     }
 
@@ -270,13 +373,9 @@ public class Player extends Entity
         {
             if(index != 999)
             {
+                attack_canceled = true;
                 game_panel.set_game_state(game_panel.get_dialogue_state());
                 game_panel.npc[index].speak(); 
-            }
-            else
-            {
-                game_panel.play_sound_effect(7);
-                is_attacking = true;
             }
         }
     }
@@ -285,10 +384,16 @@ public class Player extends Entity
     {
         if(index != 999)
         {
-            if(invincible == false)
+            if(invincible == false && game_panel.mob[index].get_is_dead() == false)
             {
+                int damage = game_panel.mob[index].attack - defense;
+                if(damage < 0)
+                {
+                    damage = 0;
+                }
+
+                life -= damage;
                 game_panel.play_sound_effect(5);
-                life -= 1;
                 invincible = true;
             }
         }
@@ -301,14 +406,92 @@ public class Player extends Entity
             if(game_panel.mob[index].invincible == false)
             {
                 game_panel.play_sound_effect(6);
-                game_panel.mob[index].life -= 1;
+
+                int damage = attack - game_panel.mob[index].defense;
+                if(damage < 0)
+                {
+                    damage = 0;
+                }
+
+                game_panel.mob[index].life -= damage;
+
+                // Message de degat au monstre
+                if(game_panel.mob[index].life > 0)
+                {
+                    game_panel.get_ui().show_message(damage + " damage!");
+                }
+
                 game_panel.mob[index].invincible = true;
                 game_panel.mob[index].damage_reaction();
 
                 if(game_panel.mob[index].life <= 0)
                 {
                     game_panel.mob[index].is_dead = true;
+                    game_panel.get_ui().show_message("You killed a " + game_panel.mob[index].name + "!");
+                    game_panel.get_ui().show_message("Exp +" + game_panel.mob[index].getExp());
+                    exp += game_panel.mob[index].getExp();
+                    check_level_up();
                 }
+            }
+        }
+    }
+
+    public void check_level_up()
+    {
+        while(exp >= next_lvl_exp)
+        {
+            level++;
+            exp = exp - next_lvl_exp;
+            next_lvl_exp = (next_lvl_exp * 2) - (next_lvl_exp / 2);
+            if(level % 3 == 0 && level < 52)
+            {
+                max_life += 2;
+            } 
+            life = max_life;
+            if(level % 2 == 0 || level % 3 == 0 || level % 5 == 0)
+            {
+                strength++;
+            } 
+            if(level % 2 == 0 || level % 7 == 0)
+            {
+                dexterity++;
+            }
+            if(level == 50)
+            {
+                entity_speed++;
+            }
+            attack = get_attack();
+            defense = get_defense();
+
+            game_panel.play_sound_effect(2);
+            game_panel.set_game_state(game_panel.get_dialogue_state());
+            game_panel.get_ui().set_dialogue("LEVEL UP! \nYou are now lvl " + level + "\nYour stats are increased!");
+        }
+    }
+
+    public void select_item()
+    {
+        int item_index = game_panel.get_ui().get_item_index();
+
+        if(item_index < inventory.size())
+        {
+            Entity selected_item = inventory.get(item_index);
+
+            if(selected_item.get_type() == type_sword || selected_item.get_type() == type_axe)
+            {
+                current_weapon = selected_item;
+                attack = get_attack();
+                get_attack_image();
+            }
+            if(selected_item.get_type() == type_shield)
+            {
+                current_shield = selected_item;
+                defense = get_defense();
+            }
+            if(selected_item.get_type() == type_consumable)
+            {
+                selected_item.use(this);
+                inventory.remove(item_index);
             }
         }
     }
@@ -435,12 +618,12 @@ public class Player extends Entity
         change_opacity(g2, 1f);
 
         // DEBUG affiche hit box
-        //g2.setFont(new Font("Arial", Font.PLAIN, 26));
-        //g2.setColor(Color.WHITE);
-        //g2.drawString("Invincible:" + compteur_invinsible, 10, 400);
-        //g2.setColor(Color.red);
-        //g2.drawRect(screen_x + solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
-        //g2.drawRect(screen_x + attack_part.x, screen_y + attack_part.y, attack_part.width, attack_part.height);
+        if(game_panel.get_key().get_debug_time() == true)
+        {
+            g2.setColor(Color.red);
+            g2.drawRect(screen_x + solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
+            g2.drawRect(screen_x + attack_part.x, screen_y + attack_part.y, attack_part.width, attack_part.height);
+        }
     }
 
 }

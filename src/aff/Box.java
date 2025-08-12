@@ -36,6 +36,8 @@ public class Box extends JPanel implements Runnable
     final int play_state = 1;                               // State pour le play
     final int dialogue_state = 2;                           // State pour le dialogue
     final int menu_state = 3;                               // State pour menu principal
+    final int status_state = 4;                             // State pour les stats du joueur
+    final int game_over_state = 5;                          // State pour le game over
 
     int fps = 60;                                           
     Thread game_thread;                               
@@ -130,6 +132,16 @@ public class Box extends JPanel implements Runnable
         return this.play_state;
     }
 
+    public int get_status_state()
+    {
+        return this.status_state;
+    }
+
+    public int get_game_over_state()
+    {
+        return this.game_over_state;
+    }
+
     public int get_pause_state()
     {
         return this.pause_state;
@@ -179,6 +191,24 @@ public class Box extends JPanel implements Runnable
     {
         game_thread = new Thread(this);
         game_thread.start();
+    }
+
+    public void retry()
+    {
+        p1.set_default_positions();
+        p1.restore_life_and_mana();
+        asset.set_npc();
+        asset.set_mob();
+        p1.setExp(0);
+    }
+
+    public void restart()
+    {
+        p1.set_default_values();
+        p1.set_items();
+        asset.set_object();
+        asset.set_npc();
+        asset.set_mob();
     }
 
     @Override
@@ -263,7 +293,7 @@ public class Box extends JPanel implements Runnable
 
         // DEBUG
         long draw_start = 0;
-        if(cle.get_check_draw_time() == true)
+        if(cle.get_debug_time() == true)
         {
             draw_start = System.nanoTime();
         }
@@ -331,13 +361,28 @@ public class Box extends JPanel implements Runnable
         }
 
         // DEBUG
-        if(cle.get_check_draw_time() == true)
+        if(cle.get_debug_time() == true)
         {
             long draw_end = System.nanoTime();
             long time_passed = draw_end - draw_start;
+
+            g2.setFont(ui.arial_12);
             g2.setColor(Color.white);
+            
+            int x = 10;
+            int y = 400;
+            final int line_height = 15;
+
+            y += line_height;
+            g2.drawString("World X" + p1.get_world_x(), x, y);
+            y += line_height;
+            g2.drawString("World Y" + p1.get_world_y(), x, y);
+            y += line_height;
+            g2.drawString("Col" + (p1.get_world_x() + p1.get_solid_part().x) / tile_size, x, y);
+            y += line_height;
+            g2.drawString("Row" + (p1.get_world_y() + p1.get_solid_part().y) / tile_size, x, y);
+            y += line_height;
             g2.drawString("Draw time: " + time_passed, 10, 400); 
-            System.out.println("Draw time: " + time_passed);
         }
 
         g2.dispose();

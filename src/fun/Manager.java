@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 
@@ -15,6 +16,8 @@ public class Manager
     Box game_panel;
     Vector<Tile> tab_block;
     int nbr_map_tile[][];
+    ArrayList<String> file_name = new ArrayList<>();
+    ArrayList<String> collision_status = new ArrayList<>();
 
     public Manager(Box new_game_panel)
     {
@@ -28,7 +31,7 @@ public class Manager
 
         nbr_map_tile = new int[game_panel.get_nbr_tile_world_max_h()][game_panel.get_nbr_tile_world_max_v()];
         get_tile_image();
-        load_map("/Map/Map.txt");
+        load_map("/Map/Map0.txt");
     }
 
     public Box get_game_panel()
@@ -48,59 +51,48 @@ public class Manager
 
     public void get_tile_image()
     {
-        // old (Test)
-        setup(0, "dirt1", false);
-        setup(1, "dirt2", false);
-        setup(2, "grass1", false);
-        setup(3, "grass2", false);
-        setup(4, "stone1", true);
-        setup(5, "stone2", true);
-        setup(6, "water1", true);
-        setup(7, "sand1", false);
-        setup(8, "tree1", true);
-        setup(9, "wood1", false);
+        setup(0, "000", false);
+        setup(1, "001", false);
+        setup(2, "002", false);
+        setup(3, "003", false);
+        setup(4, "003", false);
+        setup(5, "003", false);
+        setup(6, "003", false);
+        setup(7, "007", false);
+        setup(8, "008", false);
+        setup(9, "009", false);
 
-        // New 
-        setup(10, "dirt1", false);
-        setup(11, "dirt2", false);
+        setup(10, "010", false);
+        setup(11, "011", false);
 
-        setup(12, "grass1", false);
-        setup(13, "grass2", false);
+        setup(12, "012", false);
+        setup(13, "013", false);
 
-        setup(14, "stone1", true);
-        setup(15, "stone2", true);
+        setup(14, "014", false);
+        setup(15, "015", false);
 
-        setup(16, "water1", true);
-        setup(17, "water2-top", true);
-        setup(18, "water2-bottom", true);
-        setup(19, "water2-left", true);
-        setup(20, "water2-right", true);
-        setup(21, "water2-top-left", true);
-        setup(22, "water2-top-right", true);
-        setup(23, "water2-bottom-left", true);
-        setup(24, "water2-bottom-right", true);
-        setup(25, "water3-top", true);
-        setup(26, "water3-bottom", true);
-        setup(27, "water3-left", true);
-        setup(28, "water3-right", true);
-        setup(29, "water3-top-left", true);
-        setup(30, "water3-top-right", true);
-        setup(31, "water3-bottom-left", true);
-        setup(32, "water3-bottom-right", true);
+        setup(16, "016", true);
+        setup(17, "017", true);
+        setup(18, "018", true);
+        setup(19, "019", true);
+        setup(20, "020", true);
+        setup(21, "021", true);
+        setup(22, "022", true);
+        setup(23, "023", true);
+        setup(24, "024", true);
+        setup(25, "025", true);
+        setup(26, "026", true);
+        setup(27, "027", true);
+        setup(28, "028", true);
+        setup(29, "029", true);
+        setup(30, "030", true);
+        setup(31, "031", true);
+        setup(32, "032", true);
 
-        setup(33, "sand1", false);
-        setup(34, "sand2-top", false);
-        setup(35, "sand2-bottom", false);
-        setup(36, "sand2-left", false);
-        setup(37, "sand2-right", false);
-        setup(38, "sand2-top-left", false);
-        setup(39, "sand2-top-right", false);
-        setup(40, "sand2-bottom-left", false);
-        setup(41, "sand2-bottom-right", false);
-
-        setup(42, "tree1", true);
-
-        setup(43, "wood1", false);
+        setup(33, "033", true);
+        setup(34, "034", true);
+        setup(35, "035", true);
+        setup(36, "036", false);
 
     }
 

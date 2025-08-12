@@ -43,6 +43,7 @@ public class Events
         int x_distance = Math.abs(game_panel.get_player().get_world_x() - previous_event_x);
         int y_distance = Math.abs(game_panel.get_player().get_world_y() - previous_event_y);
         int distance = Math.max(x_distance, y_distance);
+        
         if(distance > game_panel.get_tile_size())
         {
             can_touch_event = true;
@@ -88,6 +89,7 @@ public class Events
     public void take_damage(int col, int row, int game_state)
     {
         game_panel.set_game_state(game_state);
+        game_panel.play_sound_effect(5);
         game_panel.get_ui().set_dialogue("You took damage: -0.5");
         game_panel.get_player().set_life(game_panel.get_player().get_life() - 1);
 
@@ -100,6 +102,7 @@ public class Events
         if(game_panel.get_key().get_enter_pressed() == true)
         {
             game_panel.set_game_state(game_state);
+            game_panel.get_player().set_attack_canceled(true);
             game_panel.get_ui().set_dialogue("You gain life: +1");
             game_panel.get_player().set_life(game_panel.get_player().get_life() + 2);
         }

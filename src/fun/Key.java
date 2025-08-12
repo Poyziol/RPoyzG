@@ -12,7 +12,7 @@ public class Key implements KeyListener
     boolean up_pressed,down_pressed,left_pressed,right_pressed,enter_pressed;
 
     // DEBUG
-    boolean check_draw_time = false;
+    boolean debug_time = false;
 
     public Key(Box game_panel) 
     {
@@ -21,9 +21,9 @@ public class Key implements KeyListener
 
     public Key() {}
 
-    public boolean get_check_draw_time()
+    public boolean get_debug_time()
     {
-        return this.check_draw_time;
+        return this.debug_time;
     }
 
     public boolean get_up_pressed()
@@ -61,122 +61,289 @@ public class Key implements KeyListener
     {
         int code = e.getKeyCode();
 
-        // Main menu
+        // Menu State
         if(game_panel.get_game_state() == game_panel.get_menu_state())
         {
-            if(code == KeyEvent.VK_W || code == KeyEvent.VK_Z || code == KeyEvent.VK_UP)
-            {
-                game_panel.get_ui().set_command_num(game_panel.get_ui().get_command_num() - 1);
-                if(game_panel.get_ui().get_command_num() < 0)
-                {
-                    game_panel.get_ui().set_command_num(2);
-                }
-            }
-            if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN)
-            {
-                game_panel.get_ui().set_command_num(game_panel.get_ui().get_command_num() + 1);
-                if(game_panel.get_ui().get_command_num() > 2)
-                {
-                    game_panel.get_ui().set_command_num(0);
-                }
-            }
-
-            if(code == KeyEvent.VK_ENTER)
-            {
-                if(game_panel.get_ui().get_command_num() == 0)
-                {
-                    game_panel.set_game_state(game_panel.get_play_state());
-                    game_panel.play_music(3);
-                }
-                if(game_panel.get_ui().get_command_num() == 1)
-                {
-                    
-                }
-                if(game_panel.get_ui().get_command_num() == 2)
-                {
-                    System.exit(0);
-                }
-            }
+            menu_state(code);
         }
 
         // Play state
         else if(game_panel.get_game_state() == game_panel.get_play_state())
         {
-            if(code == KeyEvent.VK_W)
-            {
-                up_pressed = true;
-            }
-            if(code == KeyEvent.VK_Z)
-            {
-                up_pressed = true;
-            }
-            if(code == KeyEvent.VK_S)
-            {
-                down_pressed = true;
-            }
-            if(code == KeyEvent.VK_Q)
-            {
-                left_pressed = true;
-            }
-            if(code == KeyEvent.VK_D)
-            {
-                right_pressed = true;
-            }
-            if(code == KeyEvent.VK_UP)
-            {
-                up_pressed = true;
-            }
-            if(code == KeyEvent.VK_DOWN)
-            {
-                down_pressed = true;
-            }
-            if(code == KeyEvent.VK_LEFT)
-            {
-                left_pressed = true;
-            }
-            if(code == KeyEvent.VK_RIGHT)
-            {
-                right_pressed = true;
-            }
-            if(code == KeyEvent.VK_H)
-            {
-                if(check_draw_time == false)
-                {
-                    check_draw_time = true;
-                }
-                if(check_draw_time == true)
-                {
-                    check_draw_time = false;
-                }
-            }
-            if(code == KeyEvent.VK_P)
-            {
-                game_panel.set_game_state(game_panel.get_pause_state());
-            }
-            if(code == KeyEvent.VK_ENTER)
-            {
-                enter_pressed = true;
-            }
+            play_state(code);
         }
 
-        // Play state
-        if(game_panel.get_game_state() == game_panel.get_pause_state())
+        // Pause state
+        else if(game_panel.get_game_state() == game_panel.get_pause_state())
         {
-            if(code == KeyEvent.VK_P)
-            {
-                game_panel.set_game_state(game_panel.get_play_state());
-            }
+            pause_state(code);
         }
 
         // Dialogue state
-        if(game_panel.get_game_state() == game_panel.get_dialogue_state())
+        else if(game_panel.get_game_state() == game_panel.get_dialogue_state())
         {
-            if(code == KeyEvent.VK_ENTER)
-            {
-                game_panel.set_game_state(game_panel.get_play_state());
-            }
+            dialogue_state(code);
+        }
+
+        // Status state
+        else if(game_panel.get_game_state() == game_panel.get_status_state())
+        {
+            status_state(code);
+        } 
+
+        // Game over state
+        else if(game_panel.get_game_state() == game_panel.get_game_over_state())
+        {
+            game_over_state(code);
         }
     }   
+
+    public void menu_state(int code)
+    {
+        if(code == KeyEvent.VK_W || code == KeyEvent.VK_Z || code == KeyEvent.VK_UP)
+        {
+            game_panel.get_ui().set_command_num(game_panel.get_ui().get_command_num() - 1);
+            game_panel.play_sound_effect(8);
+            if(game_panel.get_ui().get_command_num() < 0)
+            {
+                game_panel.get_ui().set_command_num(2);
+            }
+        }
+        if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN)
+        {
+            game_panel.get_ui().set_command_num(game_panel.get_ui().get_command_num() + 1);
+            game_panel.play_sound_effect(8);
+            if(game_panel.get_ui().get_command_num() > 2)
+            {
+                game_panel.get_ui().set_command_num(0);
+            }
+        }
+        if(code == KeyEvent.VK_ENTER)
+        {
+            if(game_panel.get_ui().get_command_num() == 0)
+            {
+                game_panel.set_game_state(game_panel.get_play_state());
+                game_panel.play_music(3);
+            }
+            if(game_panel.get_ui().get_command_num() == 1)
+            {
+                
+            }
+            if(game_panel.get_ui().get_command_num() == 2)
+            {
+                System.exit(0);
+            }
+        }
+    }
+
+    public void play_state(int code)
+    {
+        if(code == KeyEvent.VK_W)
+        {
+            up_pressed = true;
+        }
+        if(code == KeyEvent.VK_Z)
+        {
+            up_pressed = true;
+        }
+        if(code == KeyEvent.VK_S)
+        {
+            down_pressed = true;
+        }
+        if(code == KeyEvent.VK_Q)
+        {
+            left_pressed = true;
+        }
+        if(code == KeyEvent.VK_D)
+        {
+            right_pressed = true;
+        }
+        if(code == KeyEvent.VK_UP)
+        {
+            up_pressed = true;
+        }
+        if(code == KeyEvent.VK_DOWN)
+        {
+            down_pressed = true;
+        }
+        if(code == KeyEvent.VK_LEFT)
+        {
+            left_pressed = true;
+        }
+        if(code == KeyEvent.VK_RIGHT)
+        {
+            right_pressed = true;
+        }
+        if(code == KeyEvent.VK_F1)
+        {
+            if(debug_time == false)
+            {
+                debug_time = true;
+            }
+            else if(debug_time == true)
+            {
+                debug_time = false;
+            }
+        }
+        if(code == KeyEvent.VK_F5)
+        {
+
+                game_panel.get_world_template().load_map("/Map/Map.txt");
+        }
+        if(code == KeyEvent.VK_E)
+        {
+            game_panel.set_game_state(game_panel.get_status_state());
+        }
+        if(code == KeyEvent.VK_P)
+        {
+            game_panel.set_game_state(game_panel.get_pause_state());
+        }
+        if(code == KeyEvent.VK_ENTER)
+        {
+            enter_pressed = true;
+        }
+
+    }
+
+    public void pause_state(int code)
+    {
+        if(code == KeyEvent.VK_P)
+        {
+            game_panel.set_game_state(game_panel.get_play_state());
+        }
+    }
+
+    public void game_over_state(int code)
+    {
+        game_panel.stop_music();
+
+        if(code == KeyEvent.VK_W || code == KeyEvent.VK_Z || code == KeyEvent.VK_UP)
+        {
+            game_panel.get_ui().set_command_num(game_panel.get_ui().get_command_num() - 1);
+            game_panel.play_sound_effect(8);
+            if(game_panel.get_ui().get_command_num() < 0)
+            {
+                game_panel.get_ui().set_command_num(1);
+            }
+        }
+        if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN)
+        {
+            game_panel.get_ui().set_command_num(game_panel.get_ui().get_command_num() + 1);
+            game_panel.play_sound_effect(8);
+            if(game_panel.get_ui().get_command_num() > 1)
+            {
+                game_panel.get_ui().set_command_num(0);
+            }
+        }
+        if(code == KeyEvent.VK_ENTER)
+        {
+            if(game_panel.get_ui().get_command_num() == 0)
+            {
+                game_panel.play_music(3);
+                game_panel.set_game_state(game_panel.get_play_state());
+                game_panel.retry();
+
+            }
+            if(game_panel.get_ui().get_command_num() == 1)
+            {
+                game_panel.set_game_state(game_panel.get_menu_state());
+                game_panel.restart();
+            }
+        }
+    }
+
+    public void dialogue_state(int code)
+    {
+        if(code == KeyEvent.VK_ENTER)
+        {
+            game_panel.set_game_state(game_panel.get_play_state());
+        }
+    }
+
+    public void status_state(int code)
+    {
+        if(code == KeyEvent.VK_E)
+        {
+            game_panel.set_game_state(game_panel.get_play_state());
+        }
+        if(code == KeyEvent.VK_W)
+        {
+            if(game_panel.get_ui().get_slot_row() != 0)
+            {
+                game_panel.get_ui().set_slot_row(game_panel.get_ui().get_slot_row() - 1);
+                game_panel.play_sound_effect(8);
+            }
+           
+        }
+        if(code == KeyEvent.VK_Z)
+        {
+            if(game_panel.get_ui().get_slot_row() != 0)
+            {
+                game_panel.get_ui().set_slot_row(game_panel.get_ui().get_slot_row() - 1);
+                game_panel.play_sound_effect(8);
+            }
+        }
+        if(code == KeyEvent.VK_S)
+        {
+            if(game_panel.get_ui().get_slot_row() < 3)
+            {
+                game_panel.get_ui().set_slot_row(game_panel.get_ui().get_slot_row() + 1);
+                game_panel.play_sound_effect(8);
+            }
+        }
+        if(code == KeyEvent.VK_Q)
+        {
+            if(game_panel.get_ui().get_slot_col() != 0)
+            {
+                game_panel.get_ui().set_slot_col(game_panel.get_ui().get_slot_col() - 1);
+                game_panel.play_sound_effect(8);
+            }
+        }
+        if(code == KeyEvent.VK_D)
+        {
+            if(game_panel.get_ui().get_slot_col() < 6)
+            {
+                game_panel.get_ui().set_slot_col(game_panel.get_ui().get_slot_col() + 1);
+                game_panel.play_sound_effect(8);
+            }
+        }
+        if(code == KeyEvent.VK_UP)
+        {
+            if(game_panel.get_ui().get_slot_row() != 0)
+            {
+                game_panel.get_ui().set_slot_row(game_panel.get_ui().get_slot_row() - 1);
+                game_panel.play_sound_effect(8);
+            }
+        }
+        if(code == KeyEvent.VK_DOWN)
+        {
+            if(game_panel.get_ui().get_slot_row() < 3)
+            {
+                game_panel.get_ui().set_slot_row(game_panel.get_ui().get_slot_row() + 1);
+                game_panel.play_sound_effect(8);
+            }
+        }
+        if(code == KeyEvent.VK_LEFT)
+        {
+            if(game_panel.get_ui().get_slot_col() != 0)
+            {
+                game_panel.get_ui().set_slot_col(game_panel.get_ui().get_slot_col() - 1);
+                game_panel.play_sound_effect(8);
+            }
+        }
+        if(code == KeyEvent.VK_RIGHT)
+        {
+            if(game_panel.get_ui().get_slot_col() < 6)
+            {
+                game_panel.get_ui().set_slot_col(game_panel.get_ui().get_slot_col() + 1);
+                game_panel.play_sound_effect(8);
+            }
+        }
+        if(code == KeyEvent.VK_ENTER)
+        {
+            game_panel.get_player().select_item();
+        }
+    }
 
     @Override
     public void keyReleased(KeyEvent e) 

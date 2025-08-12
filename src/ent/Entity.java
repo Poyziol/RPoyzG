@@ -27,9 +27,6 @@ public class Entity
     int npc_compteur_animation = 0;
     int id_animation = 1;
 
-    // Player:0 - Entity:1 - Monster:2
-    int type;
-
     Rectangle solid_part = new Rectangle(0, 16, 48, 32);
     Rectangle attack_part = new Rectangle(0, 0, 0, 0);
     int solid_part_x;
@@ -56,7 +53,32 @@ public class Entity
 
     // Status
     int max_life;
-    int life;
+    int life;;
+    int level;
+    int strength;
+    int dexterity;
+    int attack;
+    int defense;
+    int exp;
+    int next_lvl_exp;
+    int coin;
+    Entity current_weapon;
+    Entity current_shield;
+
+    // Item value
+    int attack_value;
+    int defense_value;
+    String description = "";
+
+    // Type
+    int type;
+    public final int type_player = 0;
+    public final int type_npc = 1;
+    public final int type_monster = 2;
+    public final int type_sword = 3;
+    public final int type_shield = 4;
+    public final int type_axe = 5;
+    public final int type_consumable = 6;
     
     public Entity(Box game_panel) 
     {
@@ -66,6 +88,46 @@ public class Entity
     public Box get_game_panel()
     {
         return this.game_panel;
+    }
+
+    public String get_description()
+    {
+        return this.description;
+    }
+
+    public void set_attack_part(Rectangle new_attack_part)
+    {
+        this.attack_part = new_attack_part;
+    }
+
+    public Rectangle get_attack_part()
+    {
+        return this.attack_part;
+    }
+
+    public void set_description(String new_description)
+    {
+        this.description = new_description;
+    }
+
+    public int get_attack_value()
+    {
+        return this.attack_value;
+    }
+
+    public void set_attack_value(int new_attack_value)
+    {
+        this.attack_value = new_attack_value;
+    }
+
+    public int get_defense_value()
+    {
+        return this.defense_value;
+    }
+
+    public void set_defense_value(int new_defense_value)
+    {
+        this.defense_value = new_defense_value;
     }
 
     public boolean get_is_alive()
@@ -301,6 +363,102 @@ public class Entity
         this.life = new_life;
     }
 
+    public int getLevel() 
+    {
+        return level;
+    }
+
+    public void setLevel(int level) 
+    {
+        this.level = level;
+    }
+
+    public int getStrength() 
+    {
+        return strength;
+    }
+
+    public void setStrength(int strength) 
+    {
+        this.strength = strength;
+    }
+
+    public int getDexterity() 
+    {
+        return dexterity;
+    }
+
+    public void setDexterity(int dexterity) 
+    {
+        this.dexterity = dexterity;
+    }
+
+    public int getAttack() 
+    {
+        return attack;
+    }
+
+    public void setAttack(int attack) 
+    {
+        this.attack = attack;
+    }
+
+    public int getDefense() 
+    {
+        return defense;
+    }
+
+    public void setDefense(int defense) 
+    {
+        this.defense = defense;
+    }
+
+    public int getExp() 
+    {
+        return exp;
+    }
+
+    public void setExp(int exp) 
+    {
+        this.exp = exp;
+    }
+
+    public int getNext_lvl_exp() 
+    {
+        return next_lvl_exp;
+    }
+
+    public void setNext_lvl_exp(int next_lvl_exp) 
+    {
+        this.next_lvl_exp = next_lvl_exp;
+    }
+
+    public int getCoin() 
+    {
+        return coin;
+    }
+
+    public void setCoin(int coin) 
+    {
+        this.coin = coin;
+    }
+
+    public Entity getCurrent_weapon() {
+        return current_weapon;
+    }
+
+    public void setCurrent_weapon(Entity current_weapon) {
+        this.current_weapon = current_weapon;
+    }
+
+    public Entity getCurrent_shield() {
+        return current_shield;
+    }
+
+    public void setCurrent_shield(Entity current_shield) {
+        this.current_shield = current_shield;
+    }
+
     public BufferedImage setup(String image_path, int image_width, int image_height)
     {
         Utility utility = new Utility();
@@ -354,6 +512,8 @@ public class Entity
 
     public void action() { }
 
+    public void use(Entity entity) { }
+
     public void damage_reaction() { }
 
     public void update()
@@ -367,12 +527,19 @@ public class Entity
         game_panel.get_collision().check_entity(this, game_panel.mob);
         boolean contact_player = game_panel.get_collision().check_player(this);
 
-        if(this.type == 2 && contact_player == true)
+        if(this.type == type_monster && contact_player == true)
         {
             if(game_panel.get_player().get_invincible() == false)
             {
                 game_panel.play_sound_effect(5);
-                game_panel.get_player().set_life(game_panel.get_player().get_life() - 1);
+
+                int damage = attack - game_panel.get_player().defense;
+                if(damage < 0)
+                {
+                    damage = 0;
+                }
+
+                game_panel.get_player().set_life(game_panel.get_player().get_life() - damage);
                 game_panel.get_player().set_invincible(true);
             }
         }
@@ -518,8 +685,11 @@ public class Entity
             change_opacity(g2, 1f);
 
             // DEBUG
-            //g2.setColor(Color.red);
-            //g2.drawRect(screen_x +solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
+            if(game_panel.get_key().get_debug_time() == true)
+            {
+                g2.setColor(Color.red);
+                g2.drawRect(screen_x +solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
+            }
         }
     }
 
@@ -562,7 +732,6 @@ public class Entity
         }
         if(compteur_dead > ni * 8)
         {
-            is_dead = false;
             is_alive = false;
         }
     }
