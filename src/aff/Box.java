@@ -27,8 +27,8 @@ public class Box extends JPanel implements Runnable
     final int screen_height = tile_size * nbr_tile_max_v;   // 576
 
     //World srrings
-    final int max_world_h = 100;                            // nombre de cube horizontale de la map
-    final int max_world_v = 100;                            // nombre de cube verticale de la map
+    final int max_world_h = 250;                            // nombre de cube horizontale de la map
+    final int max_world_v = 250;                            // nombre de cube verticale de la map
 
     //Game State
     int game_state;                                         // Variable state

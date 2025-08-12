@@ -16,7 +16,7 @@ public class ObjectPotion4 extends Entity
         set_type(type_consumable);
 
         
-        set_down1(setup("/items/Potion4", game_panel.get_tile_size(), game_panel.get_tile_size()));
+        set_down1(setup("/items/potion4", game_panel.get_tile_size(), game_panel.get_tile_size()));
         set_description("[" + name + "] \nRestore the all your life and mana");
     }
 

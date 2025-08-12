@@ -79,23 +79,23 @@ public class Assets
 
         box.mob[2] = new GreenSlime(box);
         box.mob[2].setWorld_x(box.get_tile_size()*2);
-        box.mob[2].setWorld_y(box.get_tile_size()*44);
+        box.mob[2].setWorld_y(box.get_tile_size()*45);
 
         box.mob[3] = new GreenSlime(box);
         box.mob[3].setWorld_x(box.get_tile_size()*2);
-        box.mob[3].setWorld_y(box.get_tile_size()*45);
+        box.mob[3].setWorld_y(box.get_tile_size()*46);
 
         box.mob[4] = new GreenSlime(box);
         box.mob[4].setWorld_x(box.get_tile_size()*2);
-        box.mob[4].setWorld_y(box.get_tile_size()*46);
+        box.mob[4].setWorld_y(box.get_tile_size()*47);
 
         box.mob[5] = new GreenSlime(box);
         box.mob[5].setWorld_x(box.get_tile_size()*5);
-        box.mob[5].setWorld_y(box.get_tile_size()*40);
+        box.mob[5].setWorld_y(box.get_tile_size()*43);
 
         box.mob[6] = new GreenSlime(box);
         box.mob[6].setWorld_x(box.get_tile_size()*6);
-        box.mob[6].setWorld_y(box.get_tile_size()*41);
+        box.mob[6].setWorld_y(box.get_tile_size()*44);
 
         box.mob[7] = new GreenSlime(box);
         box.mob[7].setWorld_x(box.get_tile_size()*6);
@@ -124,21 +124,5 @@ public class Assets
         box.mob[13] = new GreenSlime(box);
         box.mob[13].setWorld_x(box.get_tile_size()*16);
         box.mob[13].setWorld_y(box.get_tile_size()*4);
-
-        box.mob[14] = new GreenSlime(box);
-        box.mob[14].setWorld_x(box.get_tile_size()*45);
-        box.mob[14].setWorld_y(box.get_tile_size()*6);
-
-        box.mob[15] = new GreenSlime(box);
-        box.mob[15].setWorld_x(box.get_tile_size()*22);
-        box.mob[15].setWorld_y(box.get_tile_size()*32);
-
-        box.mob[16] = new GreenSlime(box);
-        box.mob[16].setWorld_x(box.get_tile_size()*22);
-        box.mob[16].setWorld_y(box.get_tile_size()*31);
-
-        box.mob[17] = new GreenSlime(box);
-        box.mob[17].setWorld_x(box.get_tile_size()*23);
-        box.mob[17].setWorld_y(box.get_tile_size()*32);
     }
 }
