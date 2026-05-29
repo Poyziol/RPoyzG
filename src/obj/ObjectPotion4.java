@@ -17,7 +17,7 @@ public class ObjectPotion4 extends Entity
 
         
         set_down1(setup("/items/potion4", game_panel.get_tile_size(), game_panel.get_tile_size()));
-        set_description("[" + name + "] \nRestore the all your life and mana");
+        set_description("[" + name + "] \nRestore the 100% of your life and mana");
     }
 
     public void use(Entity entity)

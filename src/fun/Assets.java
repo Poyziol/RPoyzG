@@ -1,6 +1,7 @@
 package fun;
 
 import aff.Box;
+import ent.Npc1;
 import ent.Npc_old_man;
 import mob.GreenSlime;
 import obj.ObjectAxe1;
@@ -57,6 +58,10 @@ public class Assets
         box.obj[8] = new ObjectShield2(box);
         box.obj[8].setWorld_x(16 * tileSize);
         box.obj[8].setWorld_y(3 * tileSize);
+
+        box.obj[9] = new ObjectPotion1(box);
+        box.obj[9].setWorld_x(1 * tileSize);
+        box.obj[9].setWorld_y(72 * tileSize);
     }
 
     public void set_npc()
@@ -64,6 +69,10 @@ public class Assets
         box.npc[0] = new Npc_old_man(box);
         box.npc[0].setWorld_x(box.get_tile_size()*15);
         box.npc[0].setWorld_y(box.get_tile_size()*24);
+
+        box.npc[1] = new Npc1(box);
+        box.npc[1].setWorld_x(box.get_tile_size()*15);
+        box.npc[1].setWorld_y(box.get_tile_size()*25);
 
     }
 

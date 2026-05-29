@@ -96,8 +96,8 @@ public class Player extends Entity
     public void set_default_positions()
     {
         direction = "down";
-        world_x = game_panel.get_tile_size() * 2;
-        world_y = game_panel.get_tile_size() * 2;
+        world_x = game_panel.get_tile_size() * 10;
+        world_y = game_panel.get_tile_size() * 10;
     }
 
     public void restore_life_and_mana()
@@ -499,8 +499,33 @@ public class Player extends Entity
     public void draw(Graphics2D g2)
     {
         BufferedImage image = null;
-        int tmp_screen_x = screen_x;
-        int tmp_screen_y = screen_y;
+
+        int world_width = game_panel.get_nbr_tile_world_max_h() * game_panel.get_tile_size();
+        int world_height = game_panel.get_nbr_tile_world_max_v() * game_panel.get_tile_size();
+
+        int cam_x = world_x;
+        int cam_y = world_y;
+
+        int min_cam_x = screen_x;
+        int min_cam_y = screen_y;
+        int max_cam_x = world_width - screen_x;
+        int max_cam_y = world_height - screen_y;
+
+        if (cam_x < min_cam_x) {
+            cam_x = min_cam_x;
+        }
+        if (cam_y < min_cam_y) {
+            cam_y = min_cam_y;
+        }
+        if (cam_x > max_cam_x) {
+            cam_x = max_cam_x;
+        }
+        if (cam_y > max_cam_y) {
+            cam_y = max_cam_y;
+        }
+
+        int tmp_screen_x = world_x - cam_x + screen_x;
+        int tmp_screen_y = world_y - cam_y + screen_y;
 
         switch(direction) 
         {
@@ -621,8 +646,8 @@ public class Player extends Entity
         if(game_panel.get_key().get_debug_time() == true)
         {
             g2.setColor(Color.red);
-            g2.drawRect(screen_x + solid_part.x, screen_y + solid_part.y, solid_part.width, solid_part.height);
-            g2.drawRect(screen_x + attack_part.x, screen_y + attack_part.y, attack_part.width, attack_part.height);
+            g2.drawRect(tmp_screen_x + solid_part.x, tmp_screen_y + solid_part.y, solid_part.width, solid_part.height);
+            g2.drawRect(tmp_screen_x + attack_part.x, tmp_screen_y + attack_part.y, attack_part.width, attack_part.height);
         }
     }
 

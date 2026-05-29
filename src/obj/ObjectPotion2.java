@@ -16,7 +16,7 @@ public class ObjectPotion2 extends Entity
         set_type(type_consumable);
 
         set_down1(setup("/items/potion2", game_panel.get_tile_size(), game_panel.get_tile_size()));
-        set_description("[" + name + "] \nRestore the half of your mana");
+        set_description("[" + name + "] \nRestore the 50% of your mana");
     }
 
     public void use(Entity entity)

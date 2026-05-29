@@ -153,6 +153,30 @@ public class Manager
         int map_horizontale = 0;
         int map_vertiale = 0;
 
+        int world_width = game_panel.get_nbr_tile_world_max_h() * game_panel.get_tile_size();
+        int world_height = game_panel.get_nbr_tile_world_max_v() * game_panel.get_tile_size();
+
+        int cam_x = game_panel.get_player().get_world_x();
+        int cam_y = game_panel.get_player().get_world_y();
+
+        int min_cam_x = game_panel.get_player().get_screen_x();
+        int min_cam_y = game_panel.get_player().get_screen_y();
+        int max_cam_x = world_width - game_panel.get_player().get_screen_x();
+        int max_cam_y = world_height - game_panel.get_player().get_screen_y();
+
+        if (cam_x < min_cam_x) {
+            cam_x = min_cam_x;
+        }
+        if (cam_y < min_cam_y) {
+            cam_y = min_cam_y;
+        }
+        if (cam_x > max_cam_x) {
+            cam_x = max_cam_x;
+        }
+        if (cam_y > max_cam_y) {
+            cam_y = max_cam_y;
+        }
+
         while(map_horizontale < game_panel.get_nbr_tile_world_max_h() && map_vertiale < game_panel.get_nbr_tile_world_max_v())
         {
             int nbr_tile = nbr_map_tile[map_horizontale][map_vertiale];
@@ -160,13 +184,13 @@ public class Manager
             int world_x = map_horizontale * game_panel.get_tile_size();
             int world_y = map_vertiale * game_panel.get_tile_size();
 
-            int screen_x = world_x - game_panel.p1.get_world_x() + game_panel.p1.get_screen_x();
-            int screen_y = world_y - game_panel.p1.get_world_y() + game_panel.p1.get_screen_y();
+                int screen_x = world_x - cam_x + game_panel.get_player().get_screen_x();
+                int screen_y = world_y - cam_y + game_panel.get_player().get_screen_y();
 
-            if(world_x + game_panel.get_tile_size() > game_panel.get_player().get_world_x() - game_panel.get_player().get_screen_x() &&
-               world_x - game_panel.get_tile_size() < game_panel.get_player().get_world_x() + game_panel.get_player().get_screen_x() &&
-               world_y + game_panel.get_tile_size() > game_panel.get_player().get_world_y() - game_panel.get_player().get_screen_y() &&
-               world_y - game_panel.get_tile_size() < game_panel.get_player().get_world_y() + game_panel.get_player().get_screen_y())
+                if(world_x + game_panel.get_tile_size() > cam_x - game_panel.get_player().get_screen_x() &&
+                    world_x - game_panel.get_tile_size() < cam_x + game_panel.get_player().get_screen_x() &&
+                    world_y + game_panel.get_tile_size() > cam_y - game_panel.get_player().get_screen_y() &&
+                    world_y - game_panel.get_tile_size() < cam_y + game_panel.get_player().get_screen_y())
             {
                 g2.drawImage(tab_block.get(nbr_tile).get_image(), screen_x, screen_y,null);
             }
