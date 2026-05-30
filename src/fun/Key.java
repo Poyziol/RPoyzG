@@ -96,6 +96,11 @@ public class Key implements KeyListener
         {
             game_over_state(code);
         }
+        // Quest history state
+        else if(game_panel.get_game_state() == game_panel.get_quest_history_state())
+        {
+            quest_history_state(code);
+        }
     }   
 
     public void menu_state(int code)
@@ -122,12 +127,12 @@ public class Key implements KeyListener
         {
             if(game_panel.get_ui().get_command_num() == 0)
             {
-                game_panel.set_game_state(game_panel.get_play_state());
+                game_panel.start_intro_dialogue("Ou suis je? Qu est ce que je fait la ?");
                 game_panel.play_music(3);
             }
             if(game_panel.get_ui().get_command_num() == 1)
             {
-                
+
             }
             if(game_panel.get_ui().get_command_num() == 2)
             {
@@ -138,10 +143,6 @@ public class Key implements KeyListener
 
     public void play_state(int code)
     {
-        if(code == KeyEvent.VK_W)
-        {
-            up_pressed = true;
-        }
         if(code == KeyEvent.VK_Z)
         {
             up_pressed = true;
@@ -153,6 +154,10 @@ public class Key implements KeyListener
         if(code == KeyEvent.VK_Q)
         {
             left_pressed = true;
+        }
+        if(code == KeyEvent.VK_A)
+        {
+            game_panel.set_game_state(game_panel.get_quest_history_state());
         }
         if(code == KeyEvent.VK_D)
         {
@@ -252,11 +257,19 @@ public class Key implements KeyListener
         }
     }
 
+    public void quest_history_state(int code)
+    {
+        if(code == KeyEvent.VK_A || code == KeyEvent.VK_ESCAPE || code == KeyEvent.VK_ENTER)
+        {
+            game_panel.set_game_state(game_panel.get_play_state());
+        }
+    }
+
     public void dialogue_state(int code)
     {
         if(code == KeyEvent.VK_ENTER)
         {
-            game_panel.set_game_state(game_panel.get_play_state());
+            game_panel.advance_dialogue();
         }
     }
 
@@ -361,10 +374,14 @@ public class Key implements KeyListener
         {
             down_pressed = false;
         }
-        if(code == KeyEvent.VK_Q)
-        {
-            left_pressed = false;
-        }
+            if(code == KeyEvent.VK_A)
+            {
+                left_pressed = false;
+            }
+            if(code == KeyEvent.VK_Q)
+            {
+                left_pressed = false;
+            }
         if(code == KeyEvent.VK_D)
         {
             right_pressed = false;

@@ -3,6 +3,7 @@ package ent;
 import aff.*;
 import fun.*;
 import obj.ObjectKey;
+import obj.ObjectDoor;
 import obj.ObjectShield1;
 import obj.ObjectSword1;
 
@@ -96,8 +97,8 @@ public class Player extends Entity
     public void set_default_positions()
     {
         direction = "down";
-        world_x = game_panel.get_tile_size() * 10;
-        world_y = game_panel.get_tile_size() * 10;
+        world_x = game_panel.get_tile_size() * 2;
+        world_y = game_panel.get_tile_size() * 2;
     }
 
     public void restore_life_and_mana()
@@ -198,6 +199,7 @@ public class Player extends Entity
 
             // Check object collision
             int obj_index = game_panel.get_collision().check_object(this, true);
+            handle_object_quest(obj_index);
             pickup_object(obj_index);
 
             // Check NPC collision
@@ -349,7 +351,22 @@ public class Player extends Entity
     {
         if(index != 999)
         {
+            if(game_panel.obj[index] == null)
+            {
+                return;
+            }
+
             String text;
+
+            if(game_panel.obj[index] instanceof ObjectDoor)
+            {
+                return;
+            }
+
+            if(game_panel.get_quest_set_index() == 1 && game_panel.obj[index] instanceof ObjectKey)
+            {
+                game_panel.complete_quest_step(0);
+            }
 
            if(inventory.size() != inventory_size)
            {
@@ -374,8 +391,52 @@ public class Player extends Entity
             if(index != 999)
             {
                 attack_canceled = true;
-                game_panel.set_game_state(game_panel.get_dialogue_state());
-                game_panel.npc[index].speak(); 
+                game_panel.start_dialogue(game_panel.npc[index]);
+            }
+        }
+    }
+
+    private boolean has_key_item()
+    {
+        for(int ni = 0; ni < inventory.size(); ni++)
+        {
+            if(inventory.get(ni) instanceof ObjectKey)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean consume_key_item()
+    {
+        for(int ni = 0; ni < inventory.size(); ni++)
+        {
+            if(inventory.get(ni) instanceof ObjectKey)
+            {
+                inventory.remove(ni);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void handle_object_quest(int index)
+    {
+        if(index == 999)
+        {
+            return;
+        }
+
+        if(game_panel.get_quest_set_index() == 1 && game_panel.obj[index] instanceof ObjectDoor && has_key_item() == true)
+        {
+            if(consume_key_item() == true)
+            {
+                game_panel.complete_quest_step(1);
+                game_panel.set_door_opened(true);
+                game_panel.obj[index] = null;
             }
         }
     }
@@ -431,6 +492,7 @@ public class Player extends Entity
                     game_panel.get_ui().show_message("Exp +" + game_panel.mob[index].getExp());
                     exp += game_panel.mob[index].getExp();
                     check_level_up();
+                    game_panel.register_monster_kill(game_panel.mob[index].name);
                 }
             }
         }
@@ -499,30 +561,8 @@ public class Player extends Entity
     public void draw(Graphics2D g2)
     {
         BufferedImage image = null;
-
-        int world_width = game_panel.get_nbr_tile_world_max_h() * game_panel.get_tile_size();
-        int world_height = game_panel.get_nbr_tile_world_max_v() * game_panel.get_tile_size();
-
-        int cam_x = world_x;
-        int cam_y = world_y;
-
-        int min_cam_x = screen_x;
-        int min_cam_y = screen_y;
-        int max_cam_x = world_width - screen_x;
-        int max_cam_y = world_height - screen_y;
-
-        if (cam_x < min_cam_x) {
-            cam_x = min_cam_x;
-        }
-        if (cam_y < min_cam_y) {
-            cam_y = min_cam_y;
-        }
-        if (cam_x > max_cam_x) {
-            cam_x = max_cam_x;
-        }
-        if (cam_y > max_cam_y) {
-            cam_y = max_cam_y;
-        }
+        int cam_x = game_panel.get_camera_x();
+        int cam_y = game_panel.get_camera_y();
 
         int tmp_screen_x = world_x - cam_x + screen_x;
         int tmp_screen_y = world_y - cam_y + screen_y;

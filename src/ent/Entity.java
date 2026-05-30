@@ -79,6 +79,7 @@ public class Entity
     public final int type_shield = 4;
     public final int type_axe = 5;
     public final int type_consumable = 6;
+    public final int type_key = 7;
     
     public Entity(Box game_panel) 
     {
@@ -479,13 +480,7 @@ public class Entity
 
     public void speak() 
     {
-        if(dialogues[compteur_dialogue] == null)
-        {
-            compteur_dialogue = 0;
-        }
-
-        game_panel.get_ui().set_dialogue(dialogues[compteur_dialogue]);
-        compteur_dialogue++;
+        next_dialogue();
 
         switch (game_panel.p1.direction) 
         {
@@ -508,6 +503,19 @@ public class Entity
             default:
                 break;
         }
+    }
+
+    public boolean next_dialogue()
+    {
+        if(dialogues[compteur_dialogue] == null)
+        {
+            compteur_dialogue = 0;
+            return false;
+        }
+
+        game_panel.get_ui().set_dialogue(dialogues[compteur_dialogue]);
+        compteur_dialogue++;
+        return true;
     }
 
     public void action() { }
@@ -594,29 +602,8 @@ public class Entity
     {
         BufferedImage image = null;
 
-        int world_width = game_panel.get_nbr_tile_world_max_h() * game_panel.get_tile_size();
-        int world_height = game_panel.get_nbr_tile_world_max_v() * game_panel.get_tile_size();
-
-        int cam_x = game_panel.get_player().get_world_x();
-        int cam_y = game_panel.get_player().get_world_y();
-
-        int min_cam_x = game_panel.get_player().get_screen_x();
-        int min_cam_y = game_panel.get_player().get_screen_y();
-        int max_cam_x = world_width - game_panel.get_player().get_screen_x();
-        int max_cam_y = world_height - game_panel.get_player().get_screen_y();
-
-        if (cam_x < min_cam_x) {
-            cam_x = min_cam_x;
-        }
-        if (cam_y < min_cam_y) {
-            cam_y = min_cam_y;
-        }
-        if (cam_x > max_cam_x) {
-            cam_x = max_cam_x;
-        }
-        if (cam_y > max_cam_y) {
-            cam_y = max_cam_y;
-        }
+        int cam_x = game_panel.get_camera_x();
+        int cam_y = game_panel.get_camera_y();
 
         int screen_x = world_x - cam_x + game_panel.get_player().get_screen_x();
         int screen_y = world_y - cam_y + game_panel.get_player().get_screen_y();

@@ -17,7 +17,7 @@ public class GreenSlime extends Entity
         set_life(get_max_life());
         setAttack(5);
         setDefense(0);
-        setExp(20);
+        setExp(2);
         
         get_solid_part().x = 0;
         get_solid_part().y = 18;

@@ -122,6 +122,12 @@ public class UI
             draw_message();
         }
 
+        // Quest history state
+        if(game_panel.get_game_state() == game_panel.get_quest_history_state())
+        {
+            draw_quest_history_screen();
+        }
+
         // Pause state
         if(game_panel.get_game_state() == game_panel.get_pause_state())
         {
@@ -317,6 +323,117 @@ public class UI
             ni++;
             x += game_panel.get_tile_size() / 2;
         }
+
+        draw_quest_status();
+    }
+
+    public void draw_quest_status()
+    {
+        int steps = game_panel.get_quest_step_count();
+        if(steps > 3)
+        {
+            steps = 3;
+        }
+
+        int active = game_panel.get_active_quest_index();
+
+        int title_x = game_panel.get_tile_size() / 2;
+        int title_y = game_panel.get_tile_size() / 2 + (game_panel.get_tile_size() / 2) + 16;
+
+        g2.setFont(arial_12);
+        g2.setColor(Color.white);
+        g2.drawString("Objectifs actuels", title_x, title_y);
+
+        int size = game_panel.get_tile_size() / 4;
+        int spacing = size + 6;
+        int x = title_x;
+        int y = title_y + 6;
+
+        for(int ni = 0; ni < steps; ni++)
+        {
+            Color color = new Color(60, 60, 60);
+
+            if(game_panel.is_quest_done(ni))
+            {
+                color = new Color(50, 200, 60);
+            }
+            else if(ni == active)
+            {
+                color = new Color(230, 210, 40);
+            }
+
+            int diamond_x = x;
+            int diamond_y = y + (ni * spacing);
+            int half = size / 2;
+            int[] px = { diamond_x + half, diamond_x + size, diamond_x + half, diamond_x };
+            int[] py = { diamond_y, diamond_y + half, diamond_y + size, diamond_y + half };
+
+            g2.setColor(color);
+            g2.fillPolygon(px, py, 4);
+
+            g2.setColor(Color.white);
+            g2.drawString(game_panel.get_quest_text(ni), diamond_x + size + 8, diamond_y + size - 1);
+        }
+    }
+
+    public void draw_quest_history_screen()
+    {
+        final int frame_x = game_panel.get_tile_size() * 2;
+        final int frame_y = game_panel.get_tile_size();
+        final int frame_width = game_panel.get_screen_width() - (game_panel.get_tile_size() * 4);
+        final int frame_height = game_panel.get_screen_height() - (game_panel.get_tile_size() * 2);
+
+        draw_dialogue_window(frame_x, frame_y, frame_width, frame_height);
+
+        g2.setColor(Color.white);
+        g2.setFont(arial_20);
+        g2.drawString("Historique des quetes", frame_x + 20, frame_y + game_panel.get_tile_size());
+
+        g2.setFont(arial_12);
+        int text_x = frame_x + 20;
+        int text_y = frame_y + game_panel.get_tile_size() + 20;
+        int line_height = 16;
+
+        ArrayList<String> lines = new ArrayList<>();
+        ArrayList<String> history = game_panel.get_quest_history();
+
+        lines.add("Faites:");
+        for(int ni = 0; ni < history.size(); ni++)
+        {
+            lines.add("  " + history.get(ni));
+        }
+
+        lines.add("A venir:");
+        int current_set = game_panel.get_quest_set_index();
+        int set_count = game_panel.get_quest_set_count();
+        for(int si = current_set; si < set_count; si++)
+        {
+            int set_size = game_panel.get_quest_set_size(si);
+            for(int qi = 0; qi < set_size; qi++)
+            {
+                if(si == current_set && game_panel.is_quest_done(qi))
+                {
+                    continue;
+                }
+                lines.add("  " + game_panel.get_quest_set_text(si, qi));
+            }
+        }
+
+        int max_lines = (frame_height - (game_panel.get_tile_size() * 2)) / line_height;
+        int start = lines.size() - max_lines;
+        if(start < 0)
+        {
+            start = 0;
+        }
+
+        for(int ni = start; ni < lines.size(); ni++)
+        {
+            g2.drawString(lines.get(ni), text_x, text_y);
+            text_y += line_height;
+        }
+
+        g2.setFont(arial_11B);
+        g2.drawString("A pour fermer", frame_x + 20, frame_y + frame_height - 12);
     }
 
     public void draw_exp_bar()
